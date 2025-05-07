@@ -1,1 +1,53 @@
-<p>list-user works!</p>
+<div class="users-page">
+  <div class="page-header">
+    <h1>Quản lý người dùng</h1>
+    <button nz-button nzType="primary" (click)="onAddUser()">
+      <i nz-icon nzType="plus"></i>
+      Thêm người dùng
+    </button>
+  </div>
+  <nz-card>
+    <nz-table
+      #basicTable
+      [nzData]="users"
+      [nzLoading]="loading"
+      [nzShowSizeChanger]="true"
+    >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Họ tên</th>
+          <th>Email</th>
+          <th>Số điện thoại</th>
+          <th>Vai trò</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of basicTable.data">
+          <td>{{ user.id }}</td>
+          <td>{{ user.user_information.full_name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.user_information.phone_number }}</td>
+          <td>
+            <nz-tag [nzColor]="user.user_role === 'supper_admin' ? 'red' : 'blue'">
+              {{ user.user_role }}
+            </nz-tag>
+          </td>
+          <td>
+            <nz-badge
+              [nzStatus]="user.is_active ? 'success' : 'error'"
+              [nzText]="user.is_active ? 'Hoạt động' : 'Không hoạt động'"
+            ></nz-badge>
+          </td>
+          <td>
+            <a [routerLink]="['/users/edit', user.id]">
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>

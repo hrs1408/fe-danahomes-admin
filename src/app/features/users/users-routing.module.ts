@@ -2,14 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListUserComponent } from './pages/list-user/list-user.component';
 import { UserFormComponent } from './pages/user-form/user-form.component';
+
 const routes: Routes = [
   {
     path: '',
-    component: ListUserComponent,
+    component: ListUserComponent
   },
   {
     path: 'create',
-    component: UserFormComponent,
+    component: UserFormComponent
+  },
+  {
+    path: 'edit/:id',
+    component: UserFormComponent
   }
 ];
 
