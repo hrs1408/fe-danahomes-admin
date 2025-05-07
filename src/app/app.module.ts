@@ -12,6 +12,13 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import { AuthModule } from './features/auth/auth.module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
+// Import locale
+import { registerLocaleData } from '@angular/common';
+import vi from '@angular/common/locales/vi';
+import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
+
+registerLocaleData(vi);
+
 // Import tất cả icons
 const antDesignIcons = Object.keys(AllIcons).map((key) => (AllIcons as any)[key]);
 
@@ -33,7 +40,8 @@ const antDesignIcons = Object.keys(AllIcons).map((key) => (AllIcons as any)[key]
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    { provide: NZ_I18N, useValue: vi_VN }
   ],
   bootstrap: [AppComponent]
 })
