@@ -27,6 +27,13 @@ export interface CreateUserRequest {
   user_information: UserInformation;
 }
 
+export interface UpdateUserRequest {
+  email: string;
+  password?: string;
+  user_role: string;
+  user_information: UserInformation;
+}
+
 export interface ApiResponse<T> {
   data: T;
   meta: {
@@ -48,7 +55,15 @@ export class UserService {
     return this.http.get<ApiResponse<User[]>>(`${this.apiUrl}/list`);
   }
 
+  getUserById(id: number): Observable<ApiResponse<User>> {
+    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/by-id/${id}`);
+  }
+
   createUser(user: CreateUserRequest): Observable<ApiResponse<User>> {
     return this.http.post<ApiResponse<User>>(`${this.apiUrl}/create`, user);
+  }
+
+  updateUser(id: number, user: UpdateUserRequest): Observable<ApiResponse<User>> {
+    return this.http.put<ApiResponse<User>>(`${this.apiUrl}/edit/${id}`, user);
   }
 }

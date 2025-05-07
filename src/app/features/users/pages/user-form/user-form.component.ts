@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { UserService, CreateUserRequest } from '../../../../core/services/user.service';
+import { UserService, CreateUserRequest, User } from '../../../../core/services/user.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-form',
@@ -53,11 +54,42 @@ export class UserFormComponent implements OnInit {
     if (id) {
       this.isEdit = true;
       this.userId = +id;
-      // TODO: Load user data for editing
+      this.loadUserData();
     }
   }
 
+  loadUserData(): void {
+    if (!this.userId) return;
+
+    this.loading = true;
+    this.userService.getUserById(this.userId)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (response) => {
+          if (response.data) {
+            const user = response.data;
+            this.userForm.patchValue({
+              email: user.email,
+              user_role: user.user_role,
+              user_information: {
+                full_name: user.user_information.full_name,
+                phone_number: user.user_information.phone_number,
+                address: user.user_information.address,
+                dob: user.user_information.dob ? new Date(user.user_information.dob) : null
+              }
+            });
+          }
+        },
+        error: (error) => {
+          this.message.error('Có lỗi khi tải thông tin người dùng');
+          console.error('Error loading user:', error);
+          this.router.navigate(['/users']);
+        }
+      });
+  }
+
   onSubmit(): void {
+    console.log(this.userForm.valid, 'hieunph check')
     if (this.userForm.valid) {
       this.loading = true;
       const userData: CreateUserRequest = this.userForm.value;
@@ -65,6 +97,9 @@ export class UserFormComponent implements OnInit {
       if (this.isEdit) {
         // TODO: Update user
         console.log('Update user:', userData);
+        this.loading = false;
+        this.message.success('Cập nhật thông tin thành công!');
+        this.router.navigate(['/users']);
       } else {
         this.userService.createUser(userData).subscribe({
           next: (response) => {
