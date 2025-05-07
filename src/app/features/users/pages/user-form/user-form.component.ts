@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { UserService, CreateUserRequest, User } from '../../../../core/services/user.service';
+import { UserService, CreateUserRequest, UpdateUserRequest, User } from '../../../../core/services/user.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -16,6 +16,7 @@ export class UserFormComponent implements OnInit {
   isEdit = false;
   loading = false;
   userId?: number;
+  passwordVisible = false;
 
   constructor(
     private fb: FormBuilder,
@@ -26,14 +27,14 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
     this.checkEditMode();
+    this.initForm();
   }
 
   initForm(): void {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: [''],
       user_role: ['user', [Validators.required]],
       user_information: this.fb.group({
         full_name: ['', [Validators.required]],
@@ -43,9 +44,18 @@ export class UserFormComponent implements OnInit {
       })
     });
 
-    if (this.isEdit) {
-      this.userForm.get('password')?.clearValidators();
-      this.userForm.get('password')?.updateValueAndValidity();
+    this.updatePasswordValidation();
+  }
+
+  updatePasswordValidation(): void {
+    const passwordControl = this.userForm.get('password');
+    if (passwordControl) {
+      if (this.isEdit) {
+        passwordControl.clearValidators();
+      } else {
+        passwordControl.setValidators([Validators.required, Validators.minLength(6)]);
+      }
+      passwordControl.updateValueAndValidity();
     }
   }
 
@@ -89,31 +99,57 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.userForm.valid, 'hieunph check')
     if (this.userForm.valid) {
       this.loading = true;
-      const userData: CreateUserRequest = this.userForm.value;
+      const formData = this.userForm.value;
 
-      if (this.isEdit) {
-        // TODO: Update user
-        console.log('Update user:', userData);
-        this.loading = false;
-        this.message.success('Cập nhật thông tin thành công!');
-        this.router.navigate(['/users']);
+      if (this.isEdit && this.userId) {
+        // Nếu password rỗng, loại bỏ khỏi request
+        const updateData: UpdateUserRequest = {
+          email: formData.email,
+          user_role: formData.user_role,
+          user_information: formData.user_information
+        };
+
+        // Chỉ thêm password vào request nếu người dùng nhập password mới
+        if (formData.password) {
+          updateData.password = formData.password;
+        }
+
+        this.userService.updateUser(this.userId, updateData)
+          .pipe(finalize(() => this.loading = false))
+          .subscribe({
+            next: (response) => {
+              if (response.meta.error) {
+                this.message.error(response.meta.message || 'Cập nhật thất bại!');
+              } else {
+                this.message.success('Cập nhật thông tin thành công!');
+                this.router.navigate(['/users']);
+              }
+            },
+            error: (error) => {
+              this.message.error('Có lỗi xảy ra khi cập nhật người dùng!');
+              console.error('Error:', error);
+            }
+          });
       } else {
-        this.userService.createUser(userData).subscribe({
-          next: (response) => {
-            this.message.success('Thêm người dùng thành công!');
-            this.router.navigate(['/users']);
-          },
-          error: (error) => {
-            this.message.error('Có lỗi xảy ra khi thêm người dùng!');
-            console.error('Error:', error);
-          },
-          complete: () => {
-            this.loading = false;
-          }
-        });
+        const createData: CreateUserRequest = formData;
+        this.userService.createUser(createData)
+          .pipe(finalize(() => this.loading = false))
+          .subscribe({
+            next: (response) => {
+              if (response.meta.error) {
+                this.message.error(response.meta.message || 'Thêm mới thất bại!');
+              } else {
+                this.message.success('Thêm người dùng thành công!');
+                this.router.navigate(['/users']);
+              }
+            },
+            error: (error) => {
+              this.message.error('Có lỗi xảy ra khi thêm người dùng!');
+              console.error('Error:', error);
+            }
+          });
       }
     } else {
       Object.values(this.userForm.controls).forEach(control => {

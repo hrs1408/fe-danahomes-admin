@@ -39,13 +39,18 @@
             <nz-badge
               [nzStatus]="user.is_active ? 'success' : 'error'"
               [nzText]="user.is_active ? 'Hoạt động' : 'Không hoạt động'"
+              class="status-badge"
+              (click)="onToggleActive(user)"
             ></nz-badge>
           </td>
           <td>
-            <a (click)="onEditUser(user.id)" class="action-link">
+            <a (click)="onEditUser(user.id)" class="action-link" nz-tooltip [nzTooltipTitle]="'Chỉnh sửa'">
               <i nz-icon nzType="edit" nzTheme="outline"></i>
             </a>
-            <a (click)="onDeleteUser(user.id)" class="action-link" nz-popconfirm>
+            <a (click)="onToggleActive(user)" class="action-link" nz-tooltip [nzTooltipTitle]="user.is_active ? 'Hủy kích hoạt' : 'Kích hoạt'">
+              <i nz-icon [nzType]="user.is_active ? 'stop' : 'play-circle'" nzTheme="outline" [style.color]="user.is_active ? '#ff4d4f' : '#52c41a'"></i>
+            </a>
+            <a (click)="onDeleteUser(user.id)" class="action-link" nz-tooltip nzTooltipTitle="Xóa">
               <i nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></i>
             </a>
           </td>

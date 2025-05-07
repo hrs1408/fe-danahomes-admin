@@ -1,1 +1,64 @@
-<p>list-category works!</p>
+<div class="categories-page">
+  <div class="page-header">
+    <h1>Quản lý danh mục</h1>
+    <button nz-button nzType="primary" [routerLink]="['create']">
+      <i nz-icon nzType="plus"></i>
+      Thêm danh mục
+    </button>
+  </div>
+
+  <nz-card>
+    <nz-table
+      #basicTable
+      [nzData]="categories"
+      [nzLoading]="loading"
+      [nzShowSizeChanger]="true"
+    >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên danh mục</th>
+          <th>Slug</th>
+          <th>Icon</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of basicTable.data">
+          <td>{{ category.id }}</td>
+          <td>{{ category.name }}</td>
+          <td>{{ category.slug }}</td>
+          <td>
+            <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: getIconType(category.icon) }">
+            </ng-container>
+          </td>
+          <td>
+            <a class="action-link"
+               nz-tooltip
+               nzTooltipTitle="Chỉnh sửa"
+               [routerLink]="[category.id, 'edit']">
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </a>
+            <a class="action-link"
+               nz-tooltip
+               nzTooltipTitle="Xóa"
+               (click)="onDeleteCategory(category.id)">
+              <i nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #iconTemplate let-iconInfo>
+      <i *ngIf="!iconInfo.isMaterial"
+         nz-icon
+         [nzType]="iconInfo.type"
+         nzTheme="outline">
+      </i>
+      <mat-icon *ngIf="iconInfo.isMaterial">
+        {{iconInfo.type}}
+      </mat-icon>
+    </ng-template>
+  </nz-card>
+</div>

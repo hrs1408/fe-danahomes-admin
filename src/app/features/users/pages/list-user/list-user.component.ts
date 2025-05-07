@@ -81,4 +81,37 @@ export class ListUserComponent implements OnInit {
         }
       });
   }
+
+  onToggleActive(user: User): void {
+    const action = user.is_active ? 'hủy kích hoạt' : 'kích hoạt';
+    this.modal.confirm({
+      nzTitle: `Xác nhận ${action}`,
+      nzContent: `Bạn có chắc chắn muốn ${action} tài khoản này?`,
+      nzOkText: 'Xác nhận',
+      nzOkType: 'primary',
+      nzOnOk: () => this.toggleUserActive(user),
+      nzCancelText: 'Hủy',
+    });
+  }
+
+  toggleUserActive(user: User): void {
+    this.loading = true;
+    this.userService.toggleUserActive(user.id)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (response) => {
+          if (response.meta.error) {
+            this.message.error(response.meta.message || 'Thao tác thất bại!');
+          } else {
+            const action = user.is_active ? 'hủy kích hoạt' : 'kích hoạt';
+            this.message.success(`${action} tài khoản thành công!`);
+            this.loadUsers(); // Tải lại danh sách
+          }
+        },
+        error: (error) => {
+          this.message.error('Có lỗi xảy ra khi thực hiện thao tác');
+          console.error('Error:', error);
+        }
+      });
+  }
 }

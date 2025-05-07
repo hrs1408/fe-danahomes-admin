@@ -1,0 +1,9 @@
+.website-settings-container {
+  padding: 24px;
+
+  ::ng-deep {
+    .ant-tabs-nav {
+      margin-bottom: 24px;
+    }
+  }
+}

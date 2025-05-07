@@ -1,0 +1,374 @@
+.intro-container {
+  padding: 24px;
+  background: #fff;
+  border-radius: 4px;
+  margin: 0 auto;
+}
+
+.intro-container .intro-header, .intro-container .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.intro-container .intro-header h2, .intro-container .form-header h2 {
+  margin-bottom: 0;
+}
+
+.intro-container .content-view {
+  max-height: 500px !important;
+  overflow-y: auto !important;
+  padding: 16px !important;
+  background: #fff !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 2px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: #333 !important;
+}
+
+.intro-container .content-view h1, .intro-container .content-view h2, .intro-container .content-view h3, .intro-container .content-view h4, .intro-container .content-view h5, .intro-container .content-view h6 {
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  color: inherit !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.5em !important;
+}
+
+.intro-container .content-view h1 {
+  font-size: 2.5em !important;
+}
+
+.intro-container .content-view h2 {
+  font-size: 2em !important;
+}
+
+.intro-container .content-view h3 {
+  font-size: 1.75em !important;
+}
+
+.intro-container .content-view h4 {
+  font-size: 1.5em !important;
+}
+
+.intro-container .content-view h5 {
+  font-size: 1.25em !important;
+}
+
+.intro-container .content-view h6 {
+  font-size: 1em !important;
+}
+
+.intro-container .content-view p {
+  margin: 0 0 1em !important;
+  line-height: 1.6 !important;
+}
+
+.intro-container .content-view ul, .intro-container .content-view ol {
+  margin: 0 0 1em !important;
+  padding-left: 2em !important;
+}
+
+.intro-container .content-view ul li, .intro-container .content-view ol li {
+  margin-bottom: 0.5em !important;
+  line-height: 1.6 !important;
+}
+
+.intro-container .content-view ul {
+  list-style-type: disc !important;
+}
+
+.intro-container .content-view ul ul {
+  list-style-type: circle !important;
+}
+
+.intro-container .content-view ol {
+  list-style-type: decimal !important;
+}
+
+.intro-container .content-view ol ol {
+  list-style-type: lower-alpha !important;
+}
+
+.intro-container .content-view a {
+  color: #1890ff !important;
+  text-decoration: underline !important;
+}
+
+.intro-container .content-view a:hover {
+  color: #40a9ff !important;
+}
+
+.intro-container .content-view img {
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0.5em 0 !important;
+  vertical-align: middle !important;
+  border-style: none !important;
+  border-radius: 2px !important;
+}
+
+.intro-container .content-view table {
+  width: 100% !important;
+  margin: 0 0 1em !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  empty-cells: show !important;
+  border: 1px solid #e8e8e8 !important;
+}
+
+.intro-container .content-view table th, .intro-container .content-view table td {
+  padding: 0.75em !important;
+  border: 1px solid #e8e8e8 !important;
+  vertical-align: top !important;
+}
+
+.intro-container .content-view table th {
+  font-weight: 500 !important;
+  text-align: left !important;
+  background-color: #fafafa !important;
+}
+
+.intro-container .content-view table tbody tr:nth-of-type(even) {
+  background-color: #fafafa !important;
+}
+
+.intro-container .content-view blockquote {
+  margin: 0 0 1em !important;
+  padding: 0.5em 1em !important;
+  font-size: 1em !important;
+  color: #666 !important;
+  border-left: 4px solid #1890ff !important;
+  background: #f8f9fa !important;
+}
+
+.intro-container .content-view blockquote p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.intro-container .content-view pre {
+  margin: 0 0 1em !important;
+  padding: 1em !important;
+  overflow: auto !important;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace !important;
+  font-size: 0.9em !important;
+  color: #333 !important;
+  background: #f8f9fa !important;
+  border-radius: 2px !important;
+}
+
+.intro-container .content-view pre code {
+  padding: 0 !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+.intro-container .content-view code {
+  padding: 0.2em 0.4em !important;
+  margin: 0 !important;
+  font-size: 0.9em !important;
+  background-color: #f8f9fa !important;
+  border-radius: 2px !important;
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace !important;
+}
+
+.intro-container .content-view hr {
+  margin: 1em 0 !important;
+  border: 0 !important;
+  border-top: 1px solid #e8e8e8 !important;
+}
+
+.intro-container .content-view .align-left {
+  text-align: left !important;
+}
+
+.intro-container .content-view .align-center {
+  text-align: center !important;
+}
+
+.intro-container .content-view .align-right {
+  text-align: right !important;
+}
+
+.intro-container .content-view .align-justify {
+  text-align: justify !important;
+}
+
+.intro-container .content-view .image-style-align-left {
+  float: left !important;
+  margin-right: 1em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.intro-container .content-view .image-style-align-right {
+  float: right !important;
+  margin-left: 1em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.intro-container .content-view .image-style-align-center {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.intro-container .content-view::after {
+  content: '' !important;
+  display: table !important;
+  clear: both !important;
+}
+
+.intro-container .content-view figure {
+  margin: 1em 0 !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+.intro-container .content-view figure img {
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.intro-container .content-view figure figcaption {
+  margin-top: 0.5em !important;
+  color: #666 !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+  font-style: italic !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.intro-container .content-view img + em,
+.intro-container .content-view img + i {
+  display: block !important;
+  margin-top: 0.5em !important;
+  color: #666 !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+}
+
+.intro-container .content-view .image-container {
+  margin: 1em 0 !important;
+  text-align: center !important;
+}
+
+.intro-container .content-view .image-container img {
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.intro-container .content-view .image-container .image-caption {
+  margin-top: 0.5em !important;
+  color: #666 !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+  font-style: italic !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.intro-container .content-view .image-with-caption {
+  margin: 1em 0 !important;
+  text-align: center !important;
+}
+
+.intro-container .content-view .image-with-caption img {
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.intro-container .content-view .image-with-caption .caption {
+  margin-top: 0.5em !important;
+  color: #666 !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+  font-style: italic !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+.intro-container .preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 4px;
+}
+
+.intro-container .avatar-uploader {
+  width: 200px;
+  height: 200px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.intro-container .avatar-uploader:hover {
+  border-color: #1890ff;
+}
+
+.intro-container .avatar-uploader .upload-icon {
+  font-size: 32px;
+  color: #999;
+}
+
+.intro-container .avatar-uploader .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+.intro-container .avatar-uploader .avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro-container .upload-hint {
+  margin-top: 8px;
+  color: #999;
+}
+
+.intro-container editor {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.intro-container editor .tox-tinymce {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.intro-container editor .tox-tinymce:hover {
+  border-color: #40a9ff;
+}
+
+.intro-container editor .tox-tinymce.focused {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.intro-container [nz-form] {
+  max-width: 100%;
+}
+
+.intro-container nz-form-item {
+  margin-bottom: 24px;
+}
+
+.intro-container nz-form-label {
+  font-weight: 500;
+}
+
+.intro-container nz-descriptions {
+  margin-top: 16px;
+}

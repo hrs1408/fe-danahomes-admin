@@ -70,4 +70,8 @@ export class UserService {
   deleteUser(id: number): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/delete/${id}`);
   }
+
+  toggleUserActive(id: number): Observable<ApiResponse<User>> {
+    return this.http.put<ApiResponse<User>>(`${this.apiUrl}/active/${id}`, {});
+  }
 }

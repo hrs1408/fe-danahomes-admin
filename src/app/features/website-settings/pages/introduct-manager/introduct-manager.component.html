@@ -1,1 +1,104 @@
-<p>introduct-manager works!</p>
+<div class="intro-container">
+  <!-- View mode -->
+  <div class="intro-view" *ngIf="!isEditing">
+    <div class="intro-header">
+      <h2>Thông tin giới thiệu</h2>
+      <button nz-button nzType="primary" (click)="startEditing()">
+        <i nz-icon nzType="edit"></i>
+        Chỉnh sửa
+      </button>
+    </div>
+
+    <nz-descriptions [nzColumn]="1" nzBordered>
+      <nz-descriptions-item nzTitle="Tiêu đề">
+        {{ introduction?.title }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Nội dung">
+        <div class="content-view" [innerHTML]="introduction?.content ?? '' | sanitizeHtml"></div>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Trạng thái">
+        <nz-tag [nzColor]="introduction?.active === '1' ? 'success' : 'error'">
+          {{ introduction?.active === '1' ? 'Đang hiển thị' : 'Đang ẩn' }}
+        </nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Hình ảnh">
+        <img *ngIf="imageUrl" [src]="imageUrl" class="preview-image" alt="Preview" />
+        <span *ngIf="!imageUrl">Chưa có hình ảnh</span>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
+
+  <!-- Edit mode -->
+  <div class="intro-form-container" *ngIf="isEditing">
+    <div class="form-header">
+      <h2>Chỉnh sửa thông tin giới thiệu</h2>
+      <button nz-button (click)="cancelEditing()">
+        <i nz-icon nzType="close"></i>
+        Hủy
+      </button>
+    </div>
+
+    <form nz-form [formGroup]="introForm" (ngSubmit)="onSubmit()">
+      <!-- Title field -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Tiêu đề</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập tiêu đề">
+          <input nz-input formControlName="title" placeholder="Nhập tiêu đề" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Content field -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Nội dung</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập nội dung">
+          <editor
+            formControlName="content"
+            [init]="editorConfig"
+            [disabled]="loading"
+            apiKey="your-api-key">
+          </editor>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Active field -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Trạng thái</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-radio-group formControlName="active">
+            <label nz-radio [nzValue]="'1'">Hiển thị</label>
+            <label nz-radio [nzValue]="'0'">Ẩn</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Image upload -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">Hình ảnh</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-upload
+            class="avatar-uploader"
+            [nzShowUploadList]="false"
+            [nzBeforeUpload]="beforeUpload"
+            (nzChange)="onFileChange($event)"
+            [nzAccept]="'image/*'">
+            <ng-container *ngIf="!imageUrl">
+              <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
+              <div class="ant-upload-text">Tải ảnh lên</div>
+            </ng-container>
+            <img *ngIf="imageUrl" [src]="imageUrl" class="avatar" />
+          </nz-upload>
+          <div class="upload-hint">Hỗ trợ file ảnh JPG, PNG dưới 2MB</div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Submit button -->
+      <nz-form-item>
+        <nz-form-control [nzSpan]="24">
+          <button nz-button nzType="primary" [nzLoading]="loading" type="submit">
+            Cập nhật
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>

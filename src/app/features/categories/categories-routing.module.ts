@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListCategoryComponent } from './pages/list-category/list-category.component';
 import { CategoryFormComponent } from './pages/category-form/category-form.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -11,6 +12,10 @@ const routes: Routes = [
     path: 'create',
     component: CategoryFormComponent,
   },
+  {
+    path: ':id/edit',
+    component: CategoryFormComponent,
+  }
 ];
 
 @NgModule({

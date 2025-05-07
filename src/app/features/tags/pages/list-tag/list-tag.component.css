@@ -1,0 +1,65 @@
+.tags-page {
+  padding: 24px;
+}
+
+.tags-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.tags-page .page-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.tags-page nz-card {
+  margin-bottom: 24px;
+}
+
+.tags-page .ant-table-wrapper {
+  background: white;
+}
+
+.tags-page .color-preview {
+  width: 80px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tags-page .color-preview .color-value {
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.tags-page .action-link {
+  margin-right: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.tags-page .action-link:hover {
+  opacity: 0.8;
+}
+
+.tags-page .action-link:last-child {
+  margin-right: 0;
+}
+
+.tags-page .action-link i {
+  transition: transform 0.3s;
+}
+
+.tags-page .action-link:hover i {
+  transform: scale(1.1);
+}

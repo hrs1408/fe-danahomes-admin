@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'create',
     component: TagFormComponent,
   },
+  {
+    path: ':id/edit',
+    component: TagFormComponent,
+  },
 ];
 
 @NgModule({

@@ -40,7 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'website-settings',
-        loadChildren: () => import('./features/post/post.module').then(m => m.PostModule)
+        loadChildren: () => import('./features/website-settings/website-settings.module').then(m => m.WebsiteSettingsModule)
       }
     ]
   },

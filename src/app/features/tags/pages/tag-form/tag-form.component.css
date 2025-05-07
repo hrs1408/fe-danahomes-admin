@@ -1,0 +1,135 @@
+.tag-form-page {
+  padding: 24px;
+}
+
+.tag-form-page .page-header {
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  margin-bottom: 24px;
+}
+
+.tag-form-page .page-header .header-content h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.tag-form-page .page-header .header-content .description {
+  margin: 8px 0 0;
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.tag-form-page .form-container nz-card {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tag-form-page .form-container nz-card ::ng-deep .ant-card-body {
+  padding: 24px;
+}
+
+.tag-form-page .form-container .color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tag-form-page .form-container .color-picker-container .color-preview {
+  width: 100px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-form-page .form-container .color-picker-container .color-preview .color-value {
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.tag-form-page .form-container .color-picker-container .color-input {
+  width: 60px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.tag-form-page .form-container .color-picker-container .color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.tag-form-page .form-container .color-picker-container .color-input::-webkit-color-swatch {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.tag-form-page .form-container .form-actions {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.tag-form-page .form-container .form-actions button {
+  min-width: 120px;
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.tag-form-page .form-container .form-actions button i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.tag-form-page .form-container .form-actions button[nzType="default"] {
+  border-color: #d9d9d9;
+}
+
+.tag-form-page .form-container .form-actions button[nzType="default"]:hover {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+
+.tag-form-page .form-container .form-actions button[nzType="primary"] {
+  background: #1890ff;
+}
+
+.tag-form-page .form-container .form-actions button[nzType="primary"]:hover {
+  background: #40a9ff;
+}
+
+@media (max-width: 575px) {
+  .tag-form-page {
+    padding: 16px;
+  }
+  .tag-form-page .page-header {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .tag-form-page .page-header .header-content h1 {
+    font-size: 20px;
+  }
+  .tag-form-page .form-container nz-card ::ng-deep .ant-card-body {
+    padding: 16px;
+  }
+  .tag-form-page .form-container .form-actions {
+    flex-direction: column-reverse;
+  }
+  .tag-form-page .form-container .form-actions button {
+    width: 100%;
+    margin: 0;
+  }
+}

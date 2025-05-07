@@ -1,1 +1,115 @@
-<p>category-form works!</p>
+<div class="category-form-page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1>{{ isEdit ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới' }}</h1>
+      <p class="description">{{ isEdit ? 'Cập nhật thông tin danh mục' : 'Tạo danh mục mới trong hệ thống' }}</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <nz-card [nzLoading]="loading">
+      <form nz-form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" [nzLayout]="'vertical'">
+        <!-- Thông tin danh mục -->
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tên danh mục</nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng nhập tên danh mục!">
+                <input nz-input formControlName="name" placeholder="Nhập tên danh mục" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Slug</nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng nhập slug!">
+                <input nz-input formControlName="slug" placeholder="Nhập slug" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <!-- Icon Selection -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Icon</nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng chọn icon!">
+            <div class="icon-filter">
+              <nz-radio-group [(ngModel)]="iconType" [ngModelOptions]="{standalone: true}" (ngModelChange)="onIconTypeChange($event)">
+                <label nz-radio-button nzValue="all">Tất cả</label>
+                <label nz-radio-button nzValue="ant">Ant Design</label>
+                <label nz-radio-button nzValue="material">Material</label>
+              </nz-radio-group>
+            </div>
+
+            <div class="icon-search">
+              <nz-input-group [nzPrefix]="searchPrefix">
+                <input nz-input placeholder="Tìm kiếm icon..." [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" (ngModelChange)="filterIcons()"/>
+              </nz-input-group>
+              <ng-template #searchPrefix>
+                <i nz-icon nzType="search" nzTheme="outline"></i>
+              </ng-template>
+            </div>
+
+            <div class="selected-icon" *ngIf="selectedIcon">
+              <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: getIconType(selectedIcon) }">
+              </ng-container>
+              <span>{{ selectedIcon }}</span>
+            </div>
+
+            <div class="icon-grid">
+              <div *ngFor="let icon of displayedIcons"
+                   class="icon-item"
+                   [class.selected]="selectedIcon === icon"
+                   (click)="onSelectIcon(icon)"
+                   nz-tooltip
+                   [nzTooltipTitle]="icon">
+                <ng-container *ngTemplateOutlet="iconTemplate; context: { $implicit: getIconType(icon) }">
+                </ng-container>
+                <span class="icon-name">{{ icon }}</span>
+              </div>
+            </div>
+
+            <div class="pagination-container">
+              <nz-pagination
+                [nzPageIndex]="currentPage"
+                [nzTotal]="filteredIcons.length"
+                [nzPageSize]="pageSize"
+                (nzPageIndexChange)="onPageChange($event)">
+              </nz-pagination>
+            </div>
+
+            <ng-template #iconTemplate let-iconInfo>
+              <i *ngIf="!iconInfo.isMaterial"
+                 nz-icon
+                 [nzType]="iconInfo.type"
+                 nzTheme="outline">
+              </i>
+              <mat-icon *ngIf="iconInfo.isMaterial">
+                {{iconInfo.type}}
+              </mat-icon>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Buttons -->
+        <div class="form-actions">
+          <button nz-button
+                  nzType="default"
+                  type="button"
+                  (click)="onCancel()">
+            <i nz-icon nzType="close" nzTheme="outline"></i>
+            Hủy
+          </button>
+          <button nz-button
+                  nzType="primary"
+                  type="submit"
+                  [nzLoading]="loading">
+            <i nz-icon [nzType]="isEdit ? 'save' : 'plus'" nzTheme="outline"></i>
+            {{ isEdit ? 'Cập nhật' : 'Thêm mới' }}
+          </button>
+        </div>
+      </form>
+    </nz-card>
+  </div>
+</div>

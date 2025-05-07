@@ -1,1 +1,54 @@
-<p>list-tag works!</p>
+<div class="tags-page">
+  <div class="page-header">
+    <h1>Quản lý thẻ</h1>
+    <button nz-button nzType="primary" [routerLink]="['create']">
+      <i nz-icon nzType="plus"></i>
+      Thêm thẻ
+    </button>
+  </div>
+
+  <nz-card>
+    <nz-table
+      #basicTable
+      [nzData]="tags"
+      [nzLoading]="loading"
+      [nzShowSizeChanger]="true"
+    >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên thẻ</th>
+          <th>Slug</th>
+          <th>Màu sắc</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tag of basicTable.data">
+          <td>{{ tag.id }}</td>
+          <td>{{ tag.name }}</td>
+          <td>{{ tag.slug }}</td>
+          <td>
+            <div class="color-preview" [style.background-color]="tag.color">
+              <span class="color-value">{{ tag.color }}</span>
+            </div>
+          </td>
+          <td>
+            <a class="action-link"
+               nz-tooltip
+               nzTooltipTitle="Chỉnh sửa"
+               [routerLink]="[tag.id, 'edit']">
+              <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </a>
+            <a class="action-link"
+               nz-tooltip
+               nzTooltipTitle="Xóa"
+               (click)="onDeleteTag(tag.id)">
+              <i nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>

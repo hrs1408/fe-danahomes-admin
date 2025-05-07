@@ -1,0 +1,54 @@
+.categories-page {
+  padding: 24px;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #262626;
+    }
+  }
+
+  nz-card {
+    margin-bottom: 24px;
+  }
+
+  .ant-table-wrapper {
+    background: white;
+  }
+
+  .action-link {
+    margin-right: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    i {
+      transition: transform 0.3s;
+    }
+
+    &:hover i {
+      transform: scale(1.1);
+    }
+  }
+
+  // Icon column styles
+  .ant-table-cell i {
+    font-size: 18px;
+    color: #1890ff;
+  }
+}

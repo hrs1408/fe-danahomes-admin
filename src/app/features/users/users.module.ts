@@ -17,6 +17,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { ListUserComponent } from './pages/list-user/list-user.component';
 import { UserFormComponent } from './pages/user-form/user-form.component';
@@ -48,6 +49,7 @@ import { SharedModule } from '../../shared/shared.module';
     NzModalModule,
     NzPopconfirmModule,
     NzDividerModule,
+    NzToolTipModule,
     SharedModule
   ]
 })
