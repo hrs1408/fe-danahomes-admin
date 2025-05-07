@@ -1,1 +1,21 @@
-<p>sidenav works!</p>
+<div class="sidenav" [class.closed]="!(isOpen$ | async)">
+  <div class="logo">
+    <img
+      src="/assets/photos/logo-landscape-2.png"
+      alt="Logo"
+      class="logo__img"
+    />
+  </div>
+  <ul class="sidenav__list">
+    <li *ngFor="let item of sidenavItems" class="sidenav__item">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <nz-icon [nzType]="item.icon" nzTheme="outline"></nz-icon>
+        <span class="ms-2">{{ item.title }}</span>
+      </a>
+    </li>
+  </ul>
+</div>

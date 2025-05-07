@@ -1,1 +1,56 @@
-<p>header works!</p>
+<header class="header">
+  <div class="header__left">
+    <button
+      class="menu-toggle"
+      nz-button
+      nzType="text"
+      (click)="toggleSidenav()"
+    >
+      <nz-icon [nzType]="(isOpen$ | async) ? 'menu-fold' : 'menu-unfold'" nzTheme="outline"></nz-icon>
+    </button>
+
+    <div class="search">
+      <nz-input-group [nzSuffix]="suffixTemplate">
+        <input nz-input placeholder="Tìm kiếm" />
+        <ng-template #suffixTemplate>
+          <button nz-button nzType="text" nzSize="small">
+            <nz-icon nzType="search" />
+          </button>
+        </ng-template>
+      </nz-input-group>
+    </div>
+  </div>
+
+  <div class="header__center">
+    <img
+      src="/assets/photos/logo-landscape-2.png"
+      alt="Logo"
+      class="mobile-logo"
+    />
+  </div>
+
+  <div class="header__right">
+    <div class="account-settings">
+      <a nz-dropdown [nzDropdownMenu]="menu">
+        <nz-avatar
+          nzIcon="user"
+          nzSrc="https://th.bing.com/th/id/OIP.6Wi0CURuUzhoGNTsfCE-FAAAAA?rs=1&pid=ImgDetMain"
+        ></nz-avatar>
+        <span class="username">Quản trị viên</span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>
+            <nz-icon nzType="user" nzTheme="outline" />
+            <span class="ms-2">Thông tin tài khoản</span>
+          </li>
+          <li nz-menu-item nzDanger>
+            <nz-icon nzType="logout" nzTheme="outline" /><span class="ms-2"
+              >Đăng xuất</span
+            >
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+</header>

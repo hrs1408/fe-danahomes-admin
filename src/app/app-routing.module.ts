@@ -20,6 +20,42 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'categories',
+        loadChildren: () =>
+          import('./features/categories/categories.module').then(
+            (m) => m.CategoriesModule
+          ),
+      },
+      {
+        path: 'website-settings',
+        loadChildren: () =>
+          import('./features/website-settings/website-settings.module').then(
+            (m) => m.WebsiteSettingsModule
+          ),
+      },
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./features/users/users.module').then((m) => m.UsersModule),
+      },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('./features/products/products.module').then(
+            (m) => m.ProductsModule
+          ),
+      },
+      {
+        path: 'tags',
+        loadChildren: () =>
+          import('./features/tags/tags.module').then((m) => m.TagsModule),
+      },
+      {
+        path: 'post',
+        loadChildren: () =>
+          import('./features/post/post.module').then((m) => m.PostModule),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

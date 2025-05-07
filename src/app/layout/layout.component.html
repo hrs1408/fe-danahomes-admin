@@ -1,5 +1,8 @@
-<div>
-  <app-header></app-header>
-  <router-outlet></router-outlet>
-  <app-footer></app-footer>
+<div class="layout-container">
+  <app-sidenav></app-sidenav>
+  <div class="main-content" [class.sidenav-closed]="!(isOpen$ | async)">
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </div>
 </div>

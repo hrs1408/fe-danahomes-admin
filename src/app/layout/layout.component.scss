@@ -1,0 +1,42 @@
+.layout {
+  display: flex;
+  .layout__content {
+    width: 100%;
+  }
+}
+
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #f0f2f5;
+}
+
+.main-content {
+  flex: 1;
+  min-height: 100vh;
+  margin-left: 250px;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+
+  app-header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  app-footer {
+    margin-top: auto;
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  &.sidenav-closed {
+    margin-left: 0;
+  }
+}

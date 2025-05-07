@@ -1,1 +1,196 @@
-/* You can add global styles to this file, and also import other style files */
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
+
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+  font-family: "Montserrat", sans-serif;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Ant Design Override Styles */
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-picker,
+.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-input-search .ant-input-search-button,
+.ant-btn {
+  border-radius: 8px !important;
+}
+
+// Cho dropdown menu
+.ant-select-dropdown {
+  border-radius: 8px !important;
+}
+
+// Cho modal
+.ant-modal-content,
+.ant-modal-header {
+  border-radius: 12px !important;
+}
+
+// Cho card
+.ant-card {
+  border-radius: 12px !important;
+}
+
+// Cho tabs
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  border-radius: 8px 8px 0 0 !important;
+}
+
+// Cho notification và message
+.ant-notification-notice,
+.ant-message-notice-content {
+  border-radius: 8px !important;
+}
+
+// Cho popover và tooltip
+.ant-popover-content,
+.ant-tooltip-content {
+  border-radius: 8px !important;
+}
+
+// Cho drawer
+.ant-drawer-content {
+  border-radius: 12px 0 0 12px !important;
+}
+
+// Cho date picker panels
+.ant-picker-panel-container {
+  border-radius: 8px !important;
+}
+
+// Cho table
+.ant-table-container {
+  border-radius: 12px !important;
+}
+.ant-table {
+  border-radius: 12px !important;
+}
+
+

@@ -1,0 +1,63 @@
+.header {
+  width: 100%;
+  height: 60px;
+  background-color: #003c74;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .menu-toggle {
+      display: none;
+      color: white;
+      @media (max-width: 768px) {
+        display: block;
+      }
+    }
+
+    .search {
+      flex: 1;
+      min-width: 300px;
+      margin-right: 20px;
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+
+  .header__center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .mobile-logo {
+      display: none;
+      height: 40px;
+      width: auto;
+
+      @media (max-width: 768px) {
+        display: block;
+      }
+    }
+  }
+
+  .header__right {
+    .account-settings {
+      .username {
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 500;
+        margin-left: 10px;
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
