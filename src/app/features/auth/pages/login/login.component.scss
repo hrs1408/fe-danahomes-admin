@@ -1,0 +1,58 @@
+@use 'sass:color';
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding: 20px;
+
+  .login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+
+      .logo {
+        width: 200px;
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #003c74;
+        margin: 0;
+      }
+    }
+
+    .login-form {
+      .login-form-button {
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+        background-color: #003c74;
+        border-color: #003c74;
+
+        &:hover {
+          background-color: color.adjust(#003c74, $lightness: -10%);
+          border-color: color.adjust(#003c74, $lightness: -10%);
+        }
+      }
+
+      nz-form-item {
+        margin-bottom: 24px;
+      }
+
+      input {
+        height: 40px;
+      }
+    }
+  }
+}

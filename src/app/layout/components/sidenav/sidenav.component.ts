@@ -32,22 +32,22 @@ export class SidenavComponent {
 
   sidenavItems = [
     {
-      title: 'Dashboard',
+      title: 'Thống kê',
       icon: 'dashboard',
       route: '/dashboard',
     },
     {
-      title: 'Users',
+      title: 'Quản lý người dùng',
       icon: 'user',
       route: '/users',
     },
     {
-      title: 'Categories',
+      title: 'Danh mục',
       icon: 'ordered-list',
       route: '/categories',
     },
     {
-      title: 'Products',
+      title: 'Sản phẩm',
       icon: 'product',
       route: '/products',
     },
@@ -57,12 +57,12 @@ export class SidenavComponent {
       route: '/tags',
     },
     {
-      title: 'Post',
+      title: 'Bài viết',
       icon: 'copy',
       route: '/post',
     },
     {
-      title: 'Settings',
+      title: 'Cài đặt website',
       icon: 'setting',
       route: '/website-settings',
     },

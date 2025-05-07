@@ -1,1 +1,45 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-box">
+    <div class="login-header">
+      <img src="/assets/photos/logo-landscape-1.png" alt="Logo" class="logo">
+      <h1>Đăng nhập</h1>
+    </div>
+
+    <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Vui lòng nhập email hợp lệ!">
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="email"
+              nz-input
+              formControlName="email"
+              placeholder="Email"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Mật khẩu phải có ít nhất 6 ký tự!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              type="password"
+              nz-input
+              formControlName="password"
+              placeholder="Mật khẩu"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="isLoading"
+        class="login-form-button"
+      >
+        Đăng nhập
+      </button>
+    </form>
+  </div>
+</div>

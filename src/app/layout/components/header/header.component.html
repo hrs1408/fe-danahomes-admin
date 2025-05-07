@@ -6,7 +6,10 @@
       nzType="text"
       (click)="toggleSidenav()"
     >
-      <nz-icon [nzType]="(isOpen$ | async) ? 'menu-fold' : 'menu-unfold'" nzTheme="outline"></nz-icon>
+      <nz-icon
+        [nzType]="(isOpen$ | async) ? 'menu-fold' : 'menu-unfold'"
+        nzTheme="outline"
+      ></nz-icon>
     </button>
 
     <div class="search">
@@ -36,7 +39,9 @@
           nzIcon="user"
           nzSrc="https://th.bing.com/th/id/OIP.6Wi0CURuUzhoGNTsfCE-FAAAAA?rs=1&pid=ImgDetMain"
         ></nz-avatar>
-        <span class="username">Quản trị viên</span>
+        <span class="username">
+          {{ userLoggedIn?.user_information?.full_name }}
+        </span>
       </a>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
@@ -44,7 +49,7 @@
             <nz-icon nzType="user" nzTheme="outline" />
             <span class="ms-2">Thông tin tài khoản</span>
           </li>
-          <li nz-menu-item nzDanger>
+          <li nz-menu-item nzDanger (click)="logout()">
             <nz-icon nzType="logout" nzTheme="outline" /><span class="ms-2"
               >Đăng xuất</span
             >
