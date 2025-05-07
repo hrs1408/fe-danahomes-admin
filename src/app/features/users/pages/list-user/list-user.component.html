@@ -42,8 +42,11 @@
             ></nz-badge>
           </td>
           <td>
-            <a [routerLink]="['/users/edit', user.id]">
+            <a (click)="onEditUser(user.id)" class="action-link">
               <i nz-icon nzType="edit" nzTheme="outline"></i>
+            </a>
+            <a (click)="onDeleteUser(user.id)" class="action-link" nz-popconfirm>
+              <i nz-icon nzType="delete" nzTheme="outline" style="color: #ff4d4f;"></i>
             </a>
           </td>
         </tr>

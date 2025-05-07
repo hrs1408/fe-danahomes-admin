@@ -10,6 +10,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 import { ListUserComponent } from './pages/list-user/list-user.component';
 import { UserFormComponent } from './pages/user-form/user-form.component';
@@ -34,6 +41,13 @@ import { SharedModule } from '../../shared/shared.module';
     NzTagModule,
     NzBadgeModule,
     NzMessageModule,
+    NzFormModule,
+    NzInputModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    NzModalModule,
+    NzPopconfirmModule,
+    NzDividerModule,
     SharedModule
   ]
 })
