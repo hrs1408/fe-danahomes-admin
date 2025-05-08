@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -40,6 +41,7 @@ import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 const ANT_DESIGN_MODULES = [
   NzLayoutModule,
   NzDropDownModule,
@@ -85,16 +87,23 @@ const ANT_DESIGN_MODULES = [
   NzSpaceModule,
   NzGridModule,
   NzTagModule,
-  NzUploadModule
+  NzUploadModule,
+  NzDescriptionsModule,
+  NzInputModule
 ];
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     ...ANT_DESIGN_MODULES
   ],
   exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     ...ANT_DESIGN_MODULES
   ]
 })

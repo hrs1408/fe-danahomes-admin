@@ -1,0 +1,44 @@
+.container-fluid {
+  padding: 24px;
+}
+
+:host ::ng-deep {
+  .ant-upload-list-picture-card .ant-upload-list-item {
+    float: left;
+    width: 104px;
+    height: 104px;
+    margin: 0 8px 8px 0;
+  }
+
+  .ant-upload.ant-upload-select-picture-card {
+    width: 104px;
+    height: 104px;
+    margin: 0 8px 8px 0;
+  }
+
+  .upload-list-inline .ant-upload-list-item {
+    float: left;
+    width: 200px;
+    margin-right: 8px;
+  }
+
+  .upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
+    float: right;
+  }
+
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+
+  .ant-form-item-label {
+    padding-bottom: 4px;
+  }
+
+  .ant-select {
+    width: 100%;
+  }
+
+  .tox-tinymce {
+    border-radius: 2px;
+  }
+}

@@ -1,1 +1,163 @@
-<p>list-product works!</p>
+<div class="list-product-container">
+  <nz-card [nzTitle]="cardTitle" [nzExtra]="extraTemplate">
+    <ng-template #cardTitle>
+      <div class="card-title">
+        <i nz-icon nzType="shop" nzTheme="outline"></i>
+        <span>Danh sách sản phẩm</span>
+      </div>
+    </ng-template>
+
+    <ng-template #extraTemplate>
+      <button nz-button nzType="primary" (click)="createProduct()">
+        <i nz-icon nzType="plus"></i>Thêm sản phẩm
+      </button>
+    </ng-template>
+
+    <nz-table
+      #basicTable
+      [nzData]="products"
+      [nzLoading]="loading"
+      [nzShowSizeChanger]="true"
+      [nzShowPagination]="true">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Hình ảnh</th>
+          <th>Tên sản phẩm</th>
+          <th>Địa chỉ</th>
+          <th>Thông tin</th>
+          <th>Giá</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of basicTable.data; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <nz-avatar
+              [nzSize]="64"
+              [nzShape]="'square'"
+              [nzSrc]="'https://lh3.googleusercontent.com/d/'+(product.images[0]?.drive_id ?? '')"
+              [nzAlt]="product.name">
+            </nz-avatar>
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.address_detail.address }}</td>
+          <td>
+            <div>{{ product.product_detail.bedroom }} phòng ngủ</div>
+            <div>{{ product.product_detail.bathroom }} phòng tắm</div>
+            <div>{{ product.product_detail.area }}m²</div>
+          </td>
+          <td>{{ formatPrice(product.product_detail.price) }}</td>
+          <td>
+            <a nz-button nzType="link" (click)="viewProduct(product)" nz-tooltip nzTooltipTitle="Xem chi tiết">
+              <i nz-icon nzType="eye"></i>
+            </a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-button nzType="link" (click)="editProduct(product.id)" nz-tooltip nzTooltipTitle="Chỉnh sửa">
+              <i nz-icon nzType="edit"></i>
+            </a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-button nzType="link" nzDanger (click)="confirmDelete(product.id)" nz-tooltip nzTooltipTitle="Xóa">
+              <i nz-icon nzType="delete"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  nzWidth="1000"
+  [nzBodyStyle]="{ padding: '0' }">
+  <ng-template #modalTitle>
+    <div class="modal-title">
+      <span>{{ selectedProduct?.name }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <div class="product-info">
+      <div class="product-cover" *ngIf="selectedProduct?.images?.[0]?.drive_id">
+        <img [src]="'https://lh3.googleusercontent.com/d/'+ (selectedProduct?.images?.[0]?.drive_id ?? '')" [alt]="selectedProduct?.name ?? ''">
+      </div>
+      <div class="product-meta">
+        <nz-descriptions [nzColumn]="2" nzBordered>
+          <nz-descriptions-item nzTitle="Địa chỉ" [nzSpan]="2">
+            {{ selectedProduct?.address_detail?.address ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Phường/Xã">
+            {{ selectedProduct?.address_detail?.ward ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Quận/Huyện">
+            {{ selectedProduct?.address_detail?.district ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Tỉnh/Thành phố">
+            {{ selectedProduct?.address_detail?.province ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Diện tích">
+            {{ selectedProduct?.product_detail?.area ?? 0 }}m²
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Số phòng ngủ">
+            {{ selectedProduct?.product_detail?.bedroom ?? 0 }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Số phòng tắm">
+            {{ selectedProduct?.product_detail?.bathroom ?? 0 }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Giá" [nzSpan]="2">
+            {{ formatPrice(selectedProduct?.product_detail?.price ?? 0) }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Loại sản phẩm">
+            {{ selectedProduct?.product_detail?.type_product ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Chủ đầu tư">
+            {{ selectedProduct?.product_detail?.investor ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Loại dự án">
+            {{ selectedProduct?.product_detail?.project_type ?? 'N/A' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Trạng thái dự án">
+            {{ selectedProduct?.product_detail?.project_status ?? 'N/A' }}
+          </nz-descriptions-item>
+        </nz-descriptions>
+
+        <div class="utility-prices mt-4">
+          <h3>Chi phí tiện ích</h3>
+          <nz-descriptions [nzColumn]="3" nzBordered>
+            <nz-descriptions-item nzTitle="Giá điện">
+              {{ formatPrice(selectedProduct?.product_detail?.eletric_price ?? 0) }}/tháng
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Giá nước">
+              {{ formatPrice(selectedProduct?.product_detail?.water_price ?? 0) }}/tháng
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Giá internet">
+              {{ formatPrice(selectedProduct?.product_detail?.internet_price ?? 0) }}/tháng
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+
+        <div class="tags mt-4">
+          <h3>Tags</h3>
+          <nz-tag *ngFor="let tag of selectedProduct?.tag" [nzColor]="tag.color">
+            {{ tag.name }}
+          </nz-tag>
+        </div>
+
+        <div class="content mt-4">
+          <h3>Mô tả chi tiết</h3>
+          <div class="content-box" [innerHTML]="selectedProduct?.product_detail?.content ?? ''"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Đóng</button>
+  </ng-template>
+</nz-modal>
