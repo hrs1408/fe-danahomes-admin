@@ -39,6 +39,7 @@ import { NzAnchorModule } from 'ng-zorro-antd/anchor';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 const ANT_DESIGN_MODULES = [
   NzLayoutModule,
   NzDropDownModule,
@@ -83,6 +84,8 @@ const ANT_DESIGN_MODULES = [
   NzSkeletonModule,
   NzSpaceModule,
   NzGridModule,
+  NzTagModule,
+  NzUploadModule
 ];
 
 @NgModule({

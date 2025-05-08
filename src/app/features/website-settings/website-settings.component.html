@@ -1,8 +1,14 @@
 <div class="website-settings-container">
-  <nz-tabset [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
-    <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.title">
+  <nz-tabset [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)" nzType="card">
+    <nz-tab *ngFor="let tab of tabs" [nzTitle]="titleTemplate">
+      <ng-template #titleTemplate>
+        <i nz-icon [nzType]="tab.icon" nzTheme="outline"></i>
+        <span class="tab-title">{{tab.title}}</span>
+      </ng-template>
       <ng-template nz-tab>
-        <router-outlet></router-outlet>
+        <div class="tab-content">
+          <router-outlet></router-outlet>
+        </div>
       </ng-template>
     </nz-tab>
   </nz-tabset>

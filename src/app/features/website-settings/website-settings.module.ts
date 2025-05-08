@@ -17,6 +17,8 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
+import { SharedModule } from '../../shared/shared.module';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,13 @@ import { SanitizeHtmlPipe } from './pipes/sanitize-html.pipe';
     NzDescriptionsModule,
     NzTagModule,
     EditorModule,
-    WebsiteSettingsRoutingModule
+    WebsiteSettingsRoutingModule,
+    SharedModule,
+    NzCardModule
+  ],
+  exports: [
+    InformationManagerComponent,
+    IntroductManagerComponent
   ]
 })
 export class WebsiteSettingsModule { }

@@ -1,1 +1,108 @@
-<p>list-post works!</p>
+<div class="list-post-container">
+  <nz-card [nzTitle]="cardTitle" [nzExtra]="extraTemplate">
+    <ng-template #cardTitle>
+      <div class="card-title">
+        <i nz-icon nzType="read" nzTheme="outline"></i>
+        <span>Danh sách bài viết</span>
+      </div>
+    </ng-template>
+
+    <ng-template #extraTemplate>
+      <button nz-button nzType="primary" (click)="createPost()">
+        <i nz-icon nzType="plus"></i>Thêm bài viết
+      </button>
+    </ng-template>
+
+    <nz-table
+      #basicTable
+      [nzData]="posts"
+      [nzLoading]="loading"
+      [nzShowSizeChanger]="true"
+      [nzShowPagination]="true">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Hình ảnh</th>
+          <th>Tiêu đề</th>
+          <th>Loại bài viết</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of basicTable.data; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <nz-avatar
+              [nzSize]="64"
+              [nzSrc]="'https://lh3.googleusercontent.com/d/'+post.image.drive_id"
+              nzShape="square"
+              [nzAlt]="post.image.file_name">
+            </nz-avatar>
+
+          </td>
+          <td>{{ post.title }}</td>
+          <td>
+            <nz-tag [nzColor]="getPostTypeColor(post.post_type)">
+              {{ getPostTypeLabel(post.post_type) }}
+            </nz-tag>
+          </td>
+          <td>
+            <nz-tag [nzColor]="post.active === '1' ? 'success' : 'error'">
+              {{ post.active === '1' ? 'Hoạt động' : 'Không hoạt động' }}
+            </nz-tag>
+          </td>
+          <td>
+            <a nz-button nzType="link" (click)="editPost(post.id)" nz-tooltip nzTooltipTitle="Chỉnh sửa">
+              <i nz-icon nzType="edit"></i>
+            </a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-button nzType="link" (click)="viewPost(post)" nz-tooltip nzTooltipTitle="Xem chi tiết">
+              <i nz-icon nzType="eye"></i>
+            </a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-button nzType="link" nzDanger (click)="confirmDelete(post.id)" nz-tooltip nzTooltipTitle="Xóa">
+              <i nz-icon nzType="delete"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  nzWidth="1000"
+  [nzBodyStyle]="{ padding: '0' }">
+  <ng-template #modalTitle>
+    <div class="modal-title">
+      <span>{{ selectedPost?.title }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <div class="post-info">
+      <div class="post-cover" *ngIf="selectedPost?.image?.drive_id">
+        <img [src]="'https://lh3.googleusercontent.com/d/'+selectedPost?.image?.drive_id" [alt]="selectedPost?.title || ''">
+      </div>
+      <div class="post-meta mb-3">
+        <nz-tag [nzColor]="getPostTypeColor(selectedPost?.post_type || '')">
+          {{ getPostTypeLabel(selectedPost?.post_type || '') }}
+        </nz-tag>
+        <nz-tag [nzColor]="selectedPost?.active === '1' ? 'success' : 'error'" class="ml-2">
+          {{ selectedPost?.active === '1' ? 'Hoạt động' : 'Không hoạt động' }}
+        </nz-tag>
+      </div>
+      <div class="post-content" [innerHTML]="selectedPost?.content"></div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Đóng</button>
+  </ng-template>
+</nz-modal>

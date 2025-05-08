@@ -1,1 +1,166 @@
-<p>information-manager works!</p>
+<div class="container">
+  <nz-card [nzTitle]="cardTitle" [nzExtra]="cardExtra" [nzLoading]="loading">
+    <ng-template #cardTitle>
+      <div class="card-title">
+        <i nz-icon nzType="global" nzTheme="outline"></i>
+        <span>Thông tin website</span>
+      </div>
+    </ng-template>
+
+    <ng-template #cardExtra>
+      <ng-container *ngIf="!isEditMode">
+        <button nz-button nzType="primary" (click)="toggleEditMode()">
+          <i nz-icon nzType="edit"></i>Chỉnh sửa
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isEditMode">
+        <button nz-button nzType="default" (click)="cancelEdit()" class="mr-2">
+          <i nz-icon nzType="close"></i>Hủy
+        </button>
+        <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!informationForm.valid || loading">
+          <i nz-icon nzType="save"></i>Lưu thay đổi
+        </button>
+      </ng-container>
+    </ng-template>
+
+    <!-- Chế độ xem -->
+    <ng-container *ngIf="!isEditMode && information">
+      <nz-descriptions nzBordered [nzColumn]="1">
+        <nz-descriptions-item nzTitle="Địa chỉ">
+          <div class="description-content">
+            <i nz-icon nzType="environment" nzTheme="outline"></i>
+            <span>{{ information.address }}</span>
+          </div>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Hotline">
+          <div class="description-content">
+            <i nz-icon nzType="phone" nzTheme="outline"></i>
+            <span>{{ information.hotline }}</span>
+          </div>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Email">
+          <div class="description-content">
+            <i nz-icon nzType="mail" nzTheme="outline"></i>
+            <span>{{ information.email }}</span>
+          </div>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzTitle="Mạng xã hội">
+          <div class="social-links">
+            <a [href]="information.facebook" target="_blank" nz-tooltip nzTooltipTitle="Facebook">
+              <i nz-icon nzType="facebook" nzTheme="outline"></i>
+            </a>
+            <a [href]="information.twitter" target="_blank" nz-tooltip nzTooltipTitle="Twitter">
+              <i nz-icon nzType="twitter" nzTheme="outline"></i>
+            </a>
+            <a [href]="information.google" target="_blank" nz-tooltip nzTooltipTitle="Google">
+              <i nz-icon nzType="google" nzTheme="outline"></i>
+            </a>
+            <a [href]="information.zalo" target="_blank" nz-tooltip nzTooltipTitle="Zalo">
+              <span class="zalo-icon">Zalo</span>
+            </a>
+          </div>
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </ng-container>
+
+    <!-- Chế độ chỉnh sửa -->
+    <ng-container *ngIf="isEditMode">
+      <form nz-form [formGroup]="informationForm" class="edit-form">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Địa chỉ</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập địa chỉ">
+            <nz-input-group [nzPrefix]="addressPrefix">
+              <input nz-input formControlName="address" placeholder="Nhập địa chỉ" />
+            </nz-input-group>
+            <ng-template #addressPrefix>
+              <i nz-icon nzType="environment" nzTheme="outline"></i>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Hotline</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập số hotline">
+            <nz-input-group [nzPrefix]="phonePrefix">
+              <input nz-input formControlName="hotline" placeholder="Nhập số hotline" />
+            </nz-input-group>
+            <ng-template #phonePrefix>
+              <i nz-icon nzType="phone" nzTheme="outline"></i>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Email</nz-form-label>
+          <nz-form-control [nzSpan]="18" [nzErrorTip]="emailErrorTpl">
+            <nz-input-group [nzPrefix]="emailPrefix">
+              <input nz-input formControlName="email" placeholder="Nhập email" />
+            </nz-input-group>
+            <ng-template #emailPrefix>
+              <i nz-icon nzType="mail" nzTheme="outline"></i>
+            </ng-template>
+            <ng-template #emailErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Vui lòng nhập email
+              </ng-container>
+              <ng-container *ngIf="control.hasError('email')">
+                Email không hợp lệ
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Facebook</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập link Facebook">
+            <nz-input-group [nzPrefix]="facebookPrefix">
+              <input nz-input formControlName="facebook" placeholder="Nhập link Facebook" />
+            </nz-input-group>
+            <ng-template #facebookPrefix>
+              <i nz-icon nzType="facebook" nzTheme="outline"></i>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Twitter</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập link Twitter">
+            <nz-input-group [nzPrefix]="twitterPrefix">
+              <input nz-input formControlName="twitter" placeholder="Nhập link Twitter" />
+            </nz-input-group>
+            <ng-template #twitterPrefix>
+              <i nz-icon nzType="twitter" nzTheme="outline"></i>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Google</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập link Google">
+            <nz-input-group [nzPrefix]="googlePrefix">
+              <input nz-input formControlName="google" placeholder="Nhập link Google" />
+            </nz-input-group>
+            <ng-template #googlePrefix>
+              <i nz-icon nzType="google" nzTheme="outline"></i>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>Zalo</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzErrorTip="Vui lòng nhập link Zalo">
+            <nz-input-group [nzPrefix]="zaloPrefix">
+              <input nz-input formControlName="zalo" placeholder="Nhập link Zalo" />
+            </nz-input-group>
+            <ng-template #zaloPrefix>
+              <span class="zalo-prefix">Zalo</span>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-card>
+</div>

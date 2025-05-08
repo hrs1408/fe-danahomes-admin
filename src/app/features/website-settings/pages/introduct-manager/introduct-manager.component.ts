@@ -43,14 +43,14 @@ export class IntroductManagerComponent implements OnInit {
         const formData = new FormData();
         formData.append('file', blobInfo.blob(), blobInfo.filename());
 
-        fetch(`${environment.apiUrl}/upload`, {
+        fetch(`${environment.apiUrl}media/upload`, {
           method: 'POST',
           body: formData
         })
           .then(response => response.json())
           .then(result => {
-            if (result.location) {
-              resolve(result.location);
+            if (result.data.drive_id) {
+              resolve('https://lh3.googleusercontent.com/d/'+result.data.drive_id);
             } else {
               reject('Không nhận được URL ảnh từ server');
             }

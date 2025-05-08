@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+interface TabItem {
+  title: string;
+  route: string;
+  icon: string;
+}
+
 @Component({
   selector: 'app-website-settings',
   standalone: false,
@@ -9,14 +15,16 @@ import { filter } from 'rxjs/operators';
   styleUrl: './website-settings.component.scss'
 })
 export class WebsiteSettingsComponent implements OnInit {
-  tabs = [
+  tabs: TabItem[] = [
     {
       title: 'Quản lý giới thiệu',
-      route: './introduct-manager'
+      route: './introduct-manager',
+      icon: 'profile'
     },
     {
       title: 'Quản lý thông tin',
-      route: './information-manager'
+      route: './information-manager',
+      icon: 'setting'
     }
   ];
 
