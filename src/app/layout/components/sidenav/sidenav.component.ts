@@ -62,6 +62,11 @@ export class SidenavComponent {
       route: '/post',
     },
     {
+      title: 'Cần liên hệ',
+      icon: 'contacts',
+      route: '/contacts',
+    },
+    {
       title: 'Cài đặt website',
       icon: 'setting',
       route: '/website-settings',

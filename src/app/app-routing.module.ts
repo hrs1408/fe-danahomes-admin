@@ -41,6 +41,10 @@ const routes: Routes = [
       {
         path: 'website-settings',
         loadChildren: () => import('./features/website-settings/website-settings.module').then(m => m.WebsiteSettingsModule)
+      },
+      {
+        path: 'contacts',
+        loadChildren: () => import('./features/contacts/contacts.module').then(m => m.ContactsModule)
       }
     ]
   },
