@@ -47,6 +47,7 @@ export interface Product {
   id: number;
   slug: string;
   name: string;
+  category_id: number;
   address_detail: AddressDetail;
   product_detail: ProductDetail;
   tag: Tag[];

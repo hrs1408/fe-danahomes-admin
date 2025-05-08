@@ -1,44 +1,142 @@
 .container-fluid {
   padding: 24px;
+  background-color: #f0f2f5;
+  min-height: 100vh;
 }
 
 :host ::ng-deep {
-  .ant-upload-list-picture-card .ant-upload-list-item {
-    float: left;
-    width: 104px;
-    height: 104px;
-    margin: 0 8px 8px 0;
+  .ant-card {
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03),
+                0 1px 6px -1px rgba(0, 0, 0, 0.02),
+                0 2px 4px rgba(0, 0, 0, 0.02);
+
+    .ant-card-head {
+      border-bottom: 1px solid #f0f0f0;
+      margin-bottom: 24px;
+    }
   }
 
-  .ant-upload.ant-upload-select-picture-card {
-    width: 104px;
-    height: 104px;
-    margin: 0 8px 8px 0;
-  }
-
-  .upload-list-inline .ant-upload-list-item {
-    float: left;
-    width: 200px;
-    margin-right: 8px;
-  }
-
-  .upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
-    float: right;
+  .ant-divider {
+    margin: 32px 0 24px;
+    color: #1890ff;
+    font-weight: 500;
   }
 
   .ant-form-item {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+
+    .ant-form-item-label {
+      padding-bottom: 8px;
+
+      label {
+        font-weight: 500;
+        color: #262626;
+
+        &.ant-form-item-required::before {
+          color: #ff4d4f;
+        }
+      }
+    }
   }
 
-  .ant-form-item-label {
-    padding-bottom: 4px;
+  .ant-input,
+  .ant-input-number,
+  .ant-select-selector,
+  .ant-picker {
+    border-radius: 6px;
+
+    &:hover,
+    &:focus {
+      border-color: #1890ff;
+    }
   }
 
-  .ant-select {
+  .ant-input-number {
     width: 100%;
   }
 
+  .ant-upload-list-picture-card {
+    .ant-upload-list-item {
+      padding: 4px;
+      border-radius: 8px;
+    }
+  }
+
+  .ant-upload.ant-upload-select-picture-card {
+    border-radius: 8px;
+    border: 2px dashed #d9d9d9;
+    background-color: #fafafa;
+
+    &:hover {
+      border-color: #1890ff;
+    }
+  }
+
+  // Map container styles
+  .map-container {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 24px;
+  }
+
+  // TinyMCE styles
   .tox-tinymce {
-    border-radius: 2px;
+    border-radius: 6px;
+    border-color: #d9d9d9;
+  }
+
+  // Button group styles
+  .button-group {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #f0f0f0;
+
+    button {
+      min-width: 120px;
+      height: 40px;
+      border-radius: 6px;
+
+      &:not(:last-child) {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  // Search input group
+  .ant-input-group {
+    display: flex;
+
+    .ant-input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .ant-btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  // Grid layout improvements
+  .ant-row {
+    margin-bottom: 8px;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .ant-col {
+      margin-bottom: 16px;
+    }
+
+    .button-group {
+      text-align: center;
+
+      button {
+        width: 100%;
+        margin: 8px 0 !important;
+      }
+    }
   }
 }

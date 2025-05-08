@@ -50,4 +50,8 @@ export class ProductService {
     const url = `${this.apiMediaUrl}/upload?type=${fileType}&parent_id=${productDetailId}`;
     return this.http.post(url, formData);
   }
+
+  deleteImage(imageId: number, driveId: string): Observable<any> {
+    return this.http.delete(`${this.apiMediaUrl}/delete?id=${imageId}&drive_id=${driveId}`);
+  }
 }

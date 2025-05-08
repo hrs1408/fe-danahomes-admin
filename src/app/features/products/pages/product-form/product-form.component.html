@@ -1,334 +1,396 @@
-<div class="container-fluid">
-  <nz-card [nzTitle]="isEdit ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'">
-    <form nz-form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <!-- Thông tin cơ bản -->
-      <nz-divider nzText="Thông tin cơ bản"></nz-divider>
-      <div nz-row [nzGutter]="16">
-        <div nz-col [nzSpan]="12">
-          <nz-form-item>
-            <nz-form-label nzRequired>Tên sản phẩm</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập tên sản phẩm">
-              <input nz-input formControlName="name" placeholder="Nhập tên sản phẩm" />
-            </nz-form-control>
-          </nz-form-item>
+<nz-spin [nzSpinning]="loading" [nzTip]="'Đang xử lý...'">
+  <div class="container-fluid">
+    <nz-card [nzTitle]="pageTitle">
+      <ng-template #pageTitle>
+        <div style="display: flex; align-items: center;">
+          <i nz-icon [nzType]="isEdit ? 'edit' : 'plus'" style="margin-right: 8px;"></i>
+          {{ isEdit ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới' }}
         </div>
-        <div nz-col [nzSpan]="12">
-          <nz-form-item>
-            <nz-form-label nzRequired>Slug</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập slug">
-              <input nz-input formControlName="slug" placeholder="Nhập slug" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
+      </ng-template>
 
-      <div nz-row [nzGutter]="16">
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label nzRequired>Danh mục</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng chọn danh mục">
-              <nz-select formControlName="category_id" nzPlaceHolder="Chọn danh mục">
-                <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
+      <form nz-form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <!-- Thông tin cơ bản -->
+        <nz-divider nzText="Thông tin cơ bản">
+          <i nz-icon nzType="info-circle" style="margin-right: 8px;"></i>
+          Thông tin cơ bản
+        </nz-divider>
 
-      <!-- Địa chỉ và bản đồ -->
-      <nz-divider nzText="Địa chỉ và vị trí"></nz-divider>
-      <div formGroupName="address_detail">
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="24">
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
             <nz-form-item>
-              <nz-form-label nzRequired>Tìm kiếm địa chỉ</nz-form-label>
-              <nz-form-control>
-                <nz-input-group [nzSuffix]="searchButton">
-                  <input nz-input [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" placeholder="Nhập địa chỉ để tìm kiếm" />
-                </nz-input-group>
-                <ng-template #searchButton>
-                  <button nz-button nzType="primary" (click)="onSearch()">
-                    <i nz-icon nzType="search"></i>
-                  </button>
+              <nz-form-label nzRequired>Tên sản phẩm</nz-form-label>
+              <nz-form-control [nzErrorTip]="nameErrorTpl">
+                <input nz-input formControlName="name" placeholder="Nhập tên sản phẩm" />
+                <ng-template #nameErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">Vui lòng nhập tên sản phẩm</ng-container>
+                  <ng-container *ngIf="control.hasError('minlength')">Tên sản phẩm phải có ít nhất 3 ký tự</ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Slug</nz-form-label>
+              <nz-form-control [nzErrorTip]="slugErrorTpl">
+                <input nz-input formControlName="slug" placeholder="Nhập slug" />
+                <ng-template #slugErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">Vui lòng nhập slug</ng-container>
+                  <ng-container *ngIf="control.hasError('pattern')">Slug chỉ chấp nhận chữ thường, số và dấu gạch ngang</ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
 
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="24">
-            <div #mapContainer style="width: 100%; height: 400px; margin-bottom: 16px;"></div>
-          </div>
-        </div>
-
-        <div nz-row [nzGutter]="16">
+        <div nz-row [nzGutter]="24">
           <div nz-col [nzSpan]="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Địa chỉ đầy đủ</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
-                <input nz-input formControlName="address" placeholder="Địa chỉ đầy đủ" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Tỉnh/Thành phố</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn tỉnh/thành phố">
-                <input nz-input formControlName="province" placeholder="Tỉnh/Thành phố" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Quận/Huyện</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn quận/huyện">
-                <input nz-input formControlName="district" placeholder="Quận/Huyện" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Phường/Xã</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn phường/xã">
-                <input nz-input formControlName="ward" placeholder="Phường/Xã" />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-      </div>
-
-      <!-- Thông tin chi tiết sản phẩm -->
-      <nz-divider nzText="Thông tin chi tiết"></nz-divider>
-      <div formGroupName="product_detail">
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Số phòng ngủ</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng nhập số phòng ngủ">
-                <nz-input-number formControlName="bedroom" [nzMin]="0" [nzStep]="1" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Số phòng tắm</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng nhập số phòng tắm">
-                <nz-input-number formControlName="bathroom" [nzMin]="0" [nzStep]="1" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Diện tích (m²)</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng nhập diện tích">
-                <nz-input-number formControlName="area" [nzMin]="0" [nzStep]="1" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label nzRequired>Giá từ</nz-form-label>
-              <nz-form-control [nzErrorTip]="priceErrorTpl">
-                <nz-input-number formControlName="price" [nzMin]="0" [nzStep]="1000000" style="width: 100%"></nz-input-number>
-                <ng-template #priceErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')">Vui lòng nhập giá</ng-container>
-                  <ng-container *ngIf="control.hasError('min')">Giá phải lớn hơn 0</ng-container>
-                </ng-template>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label nzRequired>Giá đến</nz-form-label>
-              <nz-form-control [nzErrorTip]="priceToErrorTpl">
-                <nz-input-number formControlName="price_to" [nzMin]="0" [nzStep]="1000000" style="width: 100%"></nz-input-number>
-                <ng-template #priceToErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')">Vui lòng nhập giá</ng-container>
-                  <ng-container *ngIf="control.hasError('min')">Giá phải lớn hơn 0</ng-container>
-                  <ng-container *ngIf="control.parent?.hasError('priceRange')">Giá đến phải lớn hơn giá từ</ng-container>
-                </ng-template>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Loại sản phẩm</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn loại sản phẩm">
-                <nz-select formControlName="type_product">
-                  <nz-option *ngFor="let type of typeProducts" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Loại dự án</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn loại dự án">
-                <nz-select formControlName="project_type">
-                  <nz-option *ngFor="let type of projectTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label nzRequired>Trạng thái dự án</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn trạng thái dự án">
-                <nz-select formControlName="project_status">
-                  <nz-option *ngFor="let status of projectStatus" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              <nz-form-label nzRequired>Danh mục</nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng chọn danh mục">
+                <nz-select formControlName="category_id" nzPlaceHolder="Chọn danh mục" [nzShowSearch]="true">
+                  <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
         </div>
 
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="24">
-            <nz-form-item>
-              <nz-form-label nzRequired>Chủ đầu tư</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng nhập tên chủ đầu tư">
-                <input nz-input formControlName="investor" placeholder="Nhập tên chủ đầu tư" />
-              </nz-form-control>
-            </nz-form-item>
+        <!-- Địa chỉ và bản đồ -->
+        <nz-divider nzText="Địa chỉ và vị trí">
+          <i nz-icon nzType="environment" style="margin-right: 8px;"></i>
+          Địa chỉ và vị trí
+        </nz-divider>
+
+        <div formGroupName="address_detail">
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired>Tìm kiếm địa chỉ</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group [nzSuffix]="searchButton">
+                    <input nz-input [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}"
+                           placeholder="Nhập địa chỉ để tìm kiếm" (keyup.enter)="onSearch()" />
+                  </nz-input-group>
+                  <ng-template #searchButton>
+                    <button nz-button nzType="primary" (click)="onSearch()">
+                      <i nz-icon nzType="search"></i>
+                    </button>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="24">
+              <div #mapContainer class="map-container" style="height: 400px;"></div>
+            </div>
+          </div>
+
+          <!-- Địa chỉ chi tiết -->
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired>Địa chỉ đầy đủ</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ đầy đủ">
+                  <input nz-input formControlName="address" placeholder="Địa chỉ đầy đủ" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Tỉnh/Thành phố</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn tỉnh/thành phố">
+                  <input nz-input formControlName="province" placeholder="Tỉnh/Thành phố" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Quận/Huyện</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn quận/huyện">
+                  <input nz-input formControlName="district" placeholder="Quận/Huyện" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Phường/Xã</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn phường/xã">
+                  <input nz-input formControlName="ward" placeholder="Phường/Xã" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
           </div>
         </div>
 
-        <!-- Chi phí tiện ích -->
-        <nz-divider nzText="Chi phí tiện ích"></nz-divider>
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label>Giá điện (VNĐ/tháng)</nz-form-label>
-              <nz-form-control>
-                <nz-input-number formControlName="eletric_price" [nzMin]="0" [nzStep]="1000" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
+        <!-- Thông tin chi tiết -->
+        <nz-divider nzText="Thông tin chi tiết">
+          <i nz-icon nzType="profile" style="margin-right: 8px;"></i>
+          Thông tin chi tiết
+        </nz-divider>
+
+        <div formGroupName="product_detail">
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Số phòng ngủ</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng nhập số phòng ngủ">
+                  <nz-input-number formControlName="bedroom" [nzMin]="0" [nzStep]="1" [nzPrecision]="0"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Số phòng tắm</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng nhập số phòng tắm">
+                  <nz-input-number formControlName="bathroom" [nzMin]="0" [nzStep]="1" [nzPrecision]="0"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Diện tích (m²)</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng nhập diện tích">
+                  <nz-input-number formControlName="area" [nzMin]="0" [nzStep]="1" [nzPrecision]="0"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
           </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label>Giá nước (VNĐ/tháng)</nz-form-label>
-              <nz-form-control>
-                <nz-input-number formControlName="water_price" [nzMin]="0" [nzStep]="1000" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired>Giá từ</nz-form-label>
+                <nz-form-control [nzErrorTip]="priceErrorTpl">
+                  <nz-input-number formControlName="price" [nzMin]="0" [nzStep]="1000000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                  <ng-template #priceErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">Vui lòng nhập giá</ng-container>
+                    <ng-container *ngIf="control.hasError('min')">Giá phải lớn hơn 0</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12">
+              <nz-form-item>
+                <nz-form-label nzRequired>Giá đến</nz-form-label>
+                <nz-form-control [nzErrorTip]="priceToErrorTpl">
+                  <nz-input-number formControlName="price_to" [nzMin]="0" [nzStep]="1000000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                  <ng-template #priceToErrorTpl let-control>
+                    <ng-container *ngIf="control.hasError('required')">Vui lòng nhập giá</ng-container>
+                    <ng-container *ngIf="control.hasError('min')">Giá phải lớn hơn 0</ng-container>
+                    <ng-container *ngIf="control.parent?.hasError('priceRange')">Giá đến phải lớn hơn giá từ</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
           </div>
-          <div nz-col [nzSpan]="8">
-            <nz-form-item>
-              <nz-form-label>Giá internet (VNĐ/tháng)</nz-form-label>
-              <nz-form-control>
-                <nz-input-number formControlName="internet_price" [nzMin]="0" [nzStep]="1000" style="width: 100%"></nz-input-number>
-              </nz-form-control>
-            </nz-form-item>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Loại sản phẩm</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn loại sản phẩm">
+                  <nz-select formControlName="type_product" nzPlaceHolder="Chọn loại sản phẩm">
+                    <nz-option *ngFor="let type of typeProducts" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Loại dự án</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn loại dự án">
+                  <nz-select formControlName="project_type" nzPlaceHolder="Chọn loại dự án">
+                    <nz-option *ngFor="let type of projectTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired>Trạng thái dự án</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng chọn trạng thái dự án">
+                  <nz-select formControlName="project_status" nzPlaceHolder="Chọn trạng thái">
+                    <nz-option *ngFor="let status of projectStatus" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
           </div>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label nzRequired>Chủ đầu tư</nz-form-label>
+                <nz-form-control nzErrorTip="Vui lòng nhập tên chủ đầu tư">
+                  <input nz-input formControlName="investor" placeholder="Nhập tên chủ đầu tư" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Chi phí tiện ích -->
+          <nz-divider nzText="Chi phí tiện ích">
+            <i nz-icon nzType="dollar" style="margin-right: 8px;"></i>
+            Chi phí tiện ích
+          </nz-divider>
+
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label>Giá điện (VNĐ/tháng)</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number formControlName="eletric_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label>Giá nước (VNĐ/tháng)</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number formControlName="water_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+              <nz-form-item>
+                <nz-form-label>Giá internet (VNĐ/tháng)</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number formControlName="internet_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Tiện ích và nội thất -->
+          <div nz-row [nzGutter]="24">
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Tiện ích</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="utilities"
+                           placeholder="Nhập thông tin tiện ích"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Nội thất</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="interiol"
+                           placeholder="Nhập thông tin nội thất"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <!-- Mô tả chi tiết -->
+          <nz-form-item>
+            <nz-form-label nzRequired>Mô tả chi tiết</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng nhập mô tả chi tiết">
+              <editor formControlName="content" [init]="editorConfig"></editor>
+            </nz-form-control>
+          </nz-form-item>
         </div>
 
-        <!-- Tiện ích và nội thất -->
-        <div nz-row [nzGutter]="16">
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label>Tiện ích</nz-form-label>
-              <nz-form-control>
-                <textarea nz-input formControlName="utilities" placeholder="Nhập thông tin tiện ích" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="12">
-            <nz-form-item>
-              <nz-form-label>Nội thất</nz-form-label>
-              <nz-form-control>
-                <textarea nz-input formControlName="interiol" placeholder="Nhập thông tin nội thất" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
+        <!-- Tags -->
+        <nz-divider nzText="Tags">
+          <i nz-icon nzType="tags" style="margin-right: 8px;"></i>
+          Tags
+        </nz-divider>
 
-        <!-- Mô tả chi tiết -->
         <nz-form-item>
-          <nz-form-label nzRequired>Mô tả chi tiết</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng nhập mô tả chi tiết">
-            <editor formControlName="content" [init]="editorConfig"></editor>
+          <nz-form-label nzRequired>Tags</nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng chọn ít nhất 1 tag">
+            <nz-select formControlName="tag_ids"
+                      nzMode="multiple"
+                      nzPlaceHolder="Chọn tags"
+                      [nzMaxTagCount]="3"
+                      [nzMaxTagPlaceholder]="tagPlaceHolder">
+              <nz-option *ngFor="let tag of tags"
+                        [nzValue]="tag.id"
+                        [nzLabel]="tag.name"
+                        [nzCustomContent]="true">
+                <span [ngStyle]="{ color: tag.color }">{{ tag.name }}</span>
+              </nz-option>
+            </nz-select>
+            <ng-template #tagPlaceHolder let-selectedList>và {{ selectedList.length }} tag khác</ng-template>
           </nz-form-control>
         </nz-form-item>
-      </div>
 
-      <!-- Tags -->
-      <nz-divider nzText="Tags"></nz-divider>
-      <nz-form-item>
-        <nz-form-label nzRequired>Tags</nz-form-label>
-        <nz-form-control nzErrorTip="Vui lòng chọn ít nhất 1 tag">
-          <nz-select formControlName="tag_ids" nzMode="multiple" nzPlaceHolder="Chọn tags">
-            <nz-option *ngFor="let tag of tags" [nzValue]="tag.id" [nzLabel]="tag.name"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
+        <!-- Hình ảnh -->
+        <nz-divider nzText="Hình ảnh">
+          <i nz-icon nzType="picture" style="margin-right: 8px;"></i>
+          Hình ảnh
+        </nz-divider>
 
-      <!-- Hình ảnh -->
-      <nz-divider nzText="Hình ảnh"></nz-divider>
+        <!-- Ảnh bìa -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Ảnh bìa</nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng tải lên ảnh bìa">
+            <nz-upload
+              nzListType="picture-card"
+              [(nzFileList)]="coverImageList"
+              [nzShowButton]="coverImageList.length < 1"
+              [nzBeforeUpload]="beforeUploadCover"
+              [nzRemove]="handleRemoveCover"
+              [nzPreview]="handlePreview">
+              <div>
+                <i nz-icon nzType="plus"></i>
+                <div style="margin-top: 8px">Tải lên ảnh bìa</div>
+              </div>
+            </nz-upload>
+          </nz-form-control>
+        </nz-form-item>
 
-      <!-- Ảnh bìa -->
-      <nz-form-item>
-        <nz-form-label nzRequired>Ảnh bìa</nz-form-label>
-        <nz-form-control nzErrorTip="Vui lòng tải lên ảnh bìa">
-          <nz-upload
-            nzListType="picture-card"
-            [(nzFileList)]="coverImageList"
-            [nzShowButton]="coverImageList.length < 1"
-            [nzBeforeUpload]="beforeUploadCover"
-            [nzPreview]="handlePreview">
-            <div>
-              <i nz-icon nzType="plus"></i>
-              <div style="margin-top: 8px">Tải lên ảnh bìa</div>
-            </div>
-          </nz-upload>
-        </nz-form-control>
-      </nz-form-item>
+        <!-- Ảnh sản phẩm -->
+        <nz-form-item>
+          <nz-form-label nzRequired>Ảnh sản phẩm</nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng tải lên ít nhất một ảnh sản phẩm">
+            <nz-upload
+              nzListType="picture-card"
+              [(nzFileList)]="productImageList"
+              [nzShowButton]="productImageList.length < 8"
+              [nzBeforeUpload]="beforeUploadProductImages"
+              [nzRemove]="handleRemoveProduct"
+              [nzPreview]="handlePreview">
+              <div>
+                <i nz-icon nzType="plus"></i>
+                <div style="margin-top: 8px">Tải lên ảnh sản phẩm</div>
+              </div>
+            </nz-upload>
+          </nz-form-control>
+        </nz-form-item>
 
-      <!-- Ảnh sản phẩm -->
-      <nz-form-item>
-        <nz-form-label nzRequired>Ảnh sản phẩm</nz-form-label>
-        <nz-form-control nzErrorTip="Vui lòng tải lên ít nhất một ảnh sản phẩm">
-          <nz-upload
-            nzListType="picture-card"
-            [(nzFileList)]="productImageList"
-            [nzShowButton]="productImageList.length < 8"
-            [nzBeforeUpload]="beforeUploadProductImages"
-            [nzPreview]="handlePreview">
-            <div>
-              <i nz-icon nzType="plus"></i>
-              <div style="margin-top: 8px">Tải lên ảnh sản phẩm</div>
-            </div>
-          </nz-upload>
-        </nz-form-control>
-      </nz-form-item>
+        <!-- Modal xem trước ảnh -->
+        <nz-modal
+          [nzVisible]="previewVisible"
+          [nzContent]="modalContent"
+          [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false">
+          <ng-template #modalContent>
+            <img [src]="previewImage" style="width: 100%" />
+          </ng-template>
+        </nz-modal>
 
-      <!-- Modal xem trước ảnh -->
-      <nz-modal
-        [nzVisible]="previewVisible"
-        [nzContent]="modalContent"
-        [nzFooter]="null"
-        (nzOnCancel)="previewVisible = false">
-        <ng-template #modalContent>
-          <img [src]="previewImage" style="width: 100%" />
-        </ng-template>
-      </nz-modal>
-
-      <!-- Submit buttons -->
-      <div nz-row [nzJustify]="'end'" style="margin-top: 24px;">
-        <div nz-col>
-          <button nz-button nzType="default" style="margin-right: 8px;" (click)="onCancel()">Hủy</button>
-          <button nz-button nzType="primary" [nzLoading]="loading">{{ isEdit ? 'Cập nhật' : 'Tạo mới' }}</button>
+        <!-- Submit buttons -->
+        <div class="button-group" nz-row [nzJustify]="'end'">
+          <button nz-button nzType="default" (click)="onCancel()">
+            <i nz-icon nzType="close-circle"></i>
+            Hủy
+          </button>
+          <button nz-button nzType="primary" [nzLoading]="loading">
+            <i nz-icon [nzType]="isEdit ? 'save' : 'plus-circle'"></i>
+            {{ isEdit ? 'Cập nhật' : 'Tạo mới' }}
+          </button>
         </div>
-      </div>
-    </form>
-  </nz-card>
-</div>
+      </form>
+    </nz-card>
+  </div>
+</nz-spin>

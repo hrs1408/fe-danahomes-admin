@@ -13,6 +13,11 @@ import { Observable, Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import * as L from 'leaflet';
 
+interface CustomUploadFile extends NzUploadFile {
+  isExisting?: boolean;
+  originalData?: any;
+}
+
 @Component({
   selector: 'app-product-form',
   standalone: false,
@@ -116,8 +121,8 @@ export class ProductFormComponent implements OnInit {
   ];
 
   // Thêm properties cho ảnh
-  coverImageList: NzUploadFile[] = [];
-  productImageList: NzUploadFile[] = [];
+  coverImageList: CustomUploadFile[] = [];
+  productImageList: CustomUploadFile[] = [];
 
   // Thêm properties để lưu trữ file tạm thời
   tempCoverFile?: File;
@@ -125,6 +130,11 @@ export class ProductFormComponent implements OnInit {
 
   // Thêm property cho categories
   categories: { id: number; name: string }[] = [];
+
+  // Thêm biến để theo dõi trạng thái ảnh
+  existingCoverImage: any = null;
+  existingProductImages: any[] = [];
+  removedImageIds: number[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -144,7 +154,10 @@ export class ProductFormComponent implements OnInit {
       if (params['id']) {
         this.productId = +params['id'];
         this.isEdit = true;
-        this.loadProduct(this.productId);
+      }
+      this.initForm();
+      if (this.isEdit) {
+        this.loadProduct(this.productId!);
       }
     });
 
@@ -333,6 +346,22 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+  updateValidators(): void {
+    const coverImageControl = this.productForm.get('cover_image');
+    const productImagesControl = this.productForm.get('product_images');
+
+    if (this.isEdit) {
+      coverImageControl?.clearValidators();
+      productImagesControl?.clearValidators();
+    } else {
+      coverImageControl?.setValidators([Validators.required]);
+      productImagesControl?.setValidators([Validators.required, Validators.minLength(1)]);
+    }
+
+    coverImageControl?.updateValueAndValidity();
+    productImagesControl?.updateValueAndValidity();
+  }
+
   initForm(): void {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
@@ -343,7 +372,7 @@ export class ProductFormComponent implements OnInit {
         province: ['', [Validators.required]],
         district: ['', [Validators.required]],
         ward: ['', [Validators.required]],
-        google_address_link: ['', [Validators.required, Validators.pattern(/^https?:\/\/.*/)]]
+        google_address_link: ['', [Validators.required, Validators.pattern(/^https?:\/\/.*/)]],
       }),
       product_detail: this.fb.group({
         bedroom: [0, [Validators.required, Validators.min(0)]],
@@ -364,9 +393,11 @@ export class ProductFormComponent implements OnInit {
         interiol: ['']
       }, { validators: this.priceRangeValidator }),
       tag_ids: [[], [Validators.required, Validators.minLength(1)]],
-      cover_image: [null, [Validators.required]],
-      product_images: [[], [Validators.required, Validators.minLength(1)]]
+      cover_image: [null],
+      product_images: [[]]
     });
+
+    this.updateValidators();
   }
 
   loadProduct(id: number): void {
@@ -374,29 +405,44 @@ export class ProductFormComponent implements OnInit {
     this.productService.getProductById(id).subscribe({
       next: (response) => {
         const product = response.data;
-        this.productForm.patchValue(product);
+
+        // Cập nhật form với dữ liệu sản phẩm
+        this.productForm.patchValue({
+          name: product.name,
+          slug: product.slug,
+          category_id: product.category_id,
+          address_detail: product.address_detail,
+          product_detail: product.product_detail,
+          tag_ids: product.tag?.map(tag => tag.id) || []
+        });
 
         // Phân loại và load ảnh
         if (product.images?.length) {
           // Lọc ảnh bìa
           const coverImage = product.images.find(img => img.file_type === 'cover');
           if (coverImage) {
+            this.existingCoverImage = coverImage;
             this.coverImageList = [{
               uid: coverImage.id.toString(),
               name: coverImage.file_name,
               status: 'done',
-              url: `https://lh3.googleusercontent.com/d/${coverImage.drive_id}`
+              url: `https://lh3.googleusercontent.com/d/${coverImage.drive_id}`,
+              isExisting: true,
+              originalData: coverImage
             }];
           }
 
           // Lọc ảnh sản phẩm
           const productImages = product.images.filter(img => img.file_type === 'product');
           if (productImages.length) {
+            this.existingProductImages = productImages;
             this.productImageList = productImages.map(img => ({
               uid: img.id.toString(),
               name: img.file_name,
               status: 'done',
-              url: `https://lh3.googleusercontent.com/d/${img.drive_id}`
+              url: `https://lh3.googleusercontent.com/d/${img.drive_id}`,
+              isExisting: true,
+              originalData: img
             }));
           }
         }
@@ -441,7 +487,41 @@ export class ProductFormComponent implements OnInit {
     return false;
   };
 
+  handleRemoveCover = (file: NzUploadFile): boolean => {
+    return this.onRemoveImage(file as CustomUploadFile, 'cover');
+  };
+
+  handleRemoveProduct = (file: NzUploadFile): boolean => {
+    return this.onRemoveImage(file as CustomUploadFile, 'product');
+  };
+
+  onRemoveImage = (file: CustomUploadFile, type: 'cover' | 'product'): boolean => {
+    if (file.isExisting) {
+      const imageId = parseInt(file.uid);
+      if (!isNaN(imageId)) {
+        this.removedImageIds.push(imageId);
+      }
+    }
+
+    if (type === 'cover') {
+      this.coverImageList = [];
+      this.productForm.patchValue({ cover_image: null });
+    } else {
+      const index = this.productImageList.indexOf(file);
+      this.productImageList = this.productImageList.filter(item => item.uid !== file.uid);
+
+      // Cập nhật lại form control product_images
+      const currentFiles = this.productForm.get('product_images')?.value || [];
+      const updatedFiles = [...currentFiles];
+      updatedFiles.splice(index, 1);
+      this.productForm.patchValue({ product_images: updatedFiles });
+    }
+
+    return true;
+  };
+
   async onSubmit(): Promise<void> {
+    console.log(this.productForm); //please do not remove this line
     if (this.productForm.valid) {
       this.loading = true;
       try {
@@ -498,12 +578,20 @@ export class ProductFormComponent implements OnInit {
         }
 
         try {
-          // Upload cover image
+          // Xóa các ảnh đã đánh dấu để xóa
+          if (this.removedImageIds.length > 0) {
+            const deletePromises = this.removedImageIds.map(imageId =>
+              this.productService.deleteImage(imageId, this.existingCoverImage?.drive_id).toPromise()
+            );
+            await Promise.all(deletePromises);
+          }
+
+          // Upload cover image nếu có ảnh mới
           if (this.tempCoverFile) {
             await this.productService.uploadImage(this.tempCoverFile, 'cover', productDetailId).toPromise();
           }
 
-          // Upload product images
+          // Upload product images mới
           if (this.tempProductFiles.length > 0) {
             const uploadPromises = this.tempProductFiles.map(file =>
               this.productService.uploadImage(file, 'product', productDetailId).toPromise()
@@ -546,5 +634,15 @@ export class ProductFormComponent implements OnInit {
     }
     this.previewImage = file.url || file['preview'];
     this.previewVisible = true;
+  };
+
+  formatterVND = (value: number): string => {
+    if (!value) return '0';
+    return `${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VNĐ`;
+  };
+
+  parserVND = (value: string): number => {
+    if (!value) return 0;
+    return Number(value.replace(/[^\d]/g, ''));
   };
 }
