@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardModule } from '../../dashboard.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
 @NgModule({
@@ -8,7 +7,6 @@ import { SharedModule } from '../../../../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    DashboardModule,
     SharedModule
   ]
 })

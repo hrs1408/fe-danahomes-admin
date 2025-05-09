@@ -185,4 +185,15 @@
       </div>
     </div>
   </nz-spin>
+
+  <!-- Thêm công cụ tính toán khoản vay -->
+  <div class="mt-4">
+    <nz-card [nzTitle]="calculatorTitle">
+      <ng-template #calculatorTitle>
+        <span nz-icon nzType="calculator" nzTheme="outline"></span>
+        Công cụ tính toán khoản vay
+      </ng-template>
+      <app-loan-calculator></app-loan-calculator>
+    </nz-card>
+  </div>
 </div>
