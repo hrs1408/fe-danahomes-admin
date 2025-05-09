@@ -12,6 +12,7 @@ import { DashboardSummary } from '../../types/dashboard.type';
 export class OverviewComponent implements OnInit {
   summary: DashboardSummary | null = null;
   loading = false;
+  currentTime = new Date();
 
   constructor(
     private dashboardService: DashboardService,
@@ -20,6 +21,9 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboard();
+    setInterval(() => {
+      this.updateTime();
+    }, 1000);
   }
 
   loadDashboard(): void {
@@ -34,5 +38,9 @@ export class OverviewComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  updateTime(): void {
+    this.currentTime = new Date();
   }
 }

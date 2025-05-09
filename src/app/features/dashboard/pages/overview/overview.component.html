@@ -63,6 +63,17 @@
             </ng-template>
           </nz-card>
         </div>
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <div class="clock-title">
+              Giờ hiện tại
+            </div>
+            <div class="clock">
+              <div class="time">{{ currentTime | date:'HH:mm:ss' }}</div>
+              <div class="date">{{ currentTime | date:'dd/MM/yyyy' }}</div>
+            </div>
+          </nz-card>
+        </div>
       </div>
 
       <!-- Sản phẩm mới nhất -->
