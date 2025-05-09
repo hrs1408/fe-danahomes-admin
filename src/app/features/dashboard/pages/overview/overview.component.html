@@ -1,3 +1,159 @@
 <div class="overview-wrapper">
- dashboard
+  <nz-spin [nzSpinning]="loading">
+    <div class="overview-content" *ngIf="summary">
+      <!-- Thống kê tổng quan -->
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <nz-statistic
+              [nzValue]="summary.totalProducts"
+              [nzTitle]="'Sản phẩm'"
+              [nzPrefix]="productIcon"
+            ></nz-statistic>
+            <ng-template #productIcon>
+              <span nz-icon nzType="shopping" nzTheme="outline"></span>
+            </ng-template>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <nz-statistic
+              [nzValue]="summary.totalPosts"
+              [nzTitle]="'Bài viết'"
+              [nzPrefix]="postIcon"
+            ></nz-statistic>
+            <ng-template #postIcon>
+              <span nz-icon nzType="file-text" nzTheme="outline"></span>
+            </ng-template>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <nz-statistic
+              [nzValue]="summary.totalTags"
+              [nzTitle]="'Tags'"
+              [nzPrefix]="tagIcon"
+            ></nz-statistic>
+            <ng-template #tagIcon>
+              <span nz-icon nzType="tags" nzTheme="outline"></span>
+            </ng-template>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <nz-statistic
+              [nzValue]="summary.totalCategories"
+              [nzTitle]="'Danh mục'"
+              [nzPrefix]="categoryIcon"
+            ></nz-statistic>
+            <ng-template #categoryIcon>
+              <span nz-icon nzType="folder" nzTheme="outline"></span>
+            </ng-template>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-card>
+            <nz-statistic
+              [nzValue]="summary.totalUsers"
+              [nzTitle]="'Người dùng'"
+              [nzPrefix]="userIcon"
+            ></nz-statistic>
+            <ng-template #userIcon>
+              <span nz-icon nzType="user" nzTheme="outline"></span>
+            </ng-template>
+          </nz-card>
+        </div>
+      </div>
+
+      <!-- Sản phẩm mới nhất -->
+      <nz-card class="mt-4" [nzTitle]="'Sản phẩm mới nhất'">
+        <nz-table #productTable [nzData]="summary.recentProducts" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>Tên sản phẩm</th>
+              <th>Loại</th>
+              <th>Địa chỉ</th>
+              <th>Giá</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of summary.recentProducts">
+              <td>{{ product.name }}</td>
+              <td>{{ product.product_detail.type_product }}</td>
+              <td>
+                {{ product.address_detail.address }}
+              </td>
+              <td>{{ product.product_detail.price | number }} VND</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+      <!-- Bài viết mới nhất -->
+      <nz-card class="mt-4" [nzTitle]="'Bài viết mới nhất'">
+        <nz-table #postTable [nzData]="summary.recentPosts" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>Tiêu đề</th>
+              <th>Loại</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let post of summary.recentPosts">
+              <td>{{ post.title }}</td>
+              <td>{{ post.post_type }}</td>
+              <td>
+                <nz-tag [nzColor]="post.active === '1' ? 'success' : 'error'">
+                  {{ post.active === '1' ? 'Đang hoạt động' : 'Đã ẩn' }}
+                </nz-tag>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+      <!-- Người dùng hoạt động -->
+      <nz-card class="mt-4" [nzTitle]="'Người dùng hoạt động'">
+        <nz-table #userTable [nzData]="summary.activeUsers" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Vai trò</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of summary.activeUsers">
+              <td>{{ user.email }}</td>
+              <td>{{ user.user_role }}</td>
+              <td>
+                <nz-tag [nzColor]="user.is_active ? 'success' : 'error'">
+                  {{ user.is_active ? 'Đang hoạt động' : 'Đã khóa' }}
+                </nz-tag>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+      <!-- Tags và Danh mục phổ biến -->
+      <div nz-row [nzGutter]="16" class="mt-4">
+        <div nz-col [nzSpan]="12">
+          <nz-card [nzTitle]="'Tags phổ biến'">
+            <nz-tag *ngFor="let tag of summary.popularTags" [nzColor]="'blue'" class="mb-2">
+              {{ tag.name }}
+            </nz-tag>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-card [nzTitle]="'Danh mục phổ biến'">
+            <nz-tag *ngFor="let category of summary.popularCategories" [nzColor]="'green'" class="mb-2">
+              {{ category.name }}
+            </nz-tag>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </nz-spin>
 </div>

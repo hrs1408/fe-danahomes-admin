@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OverviewComponent } from './overview.component';
-
-
+import { DashboardModule } from '../../dashboard.module';
+import { SharedModule } from '../../../../shared/shared.module';
 
 @NgModule({
   declarations: [
-    OverviewComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    DashboardModule,
+    SharedModule
   ]
 })
 export class OverviewModule { }

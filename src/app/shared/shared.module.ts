@@ -42,6 +42,7 @@ import { NzBackTopModule } from 'ng-zorro-antd/back-top';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 const ANT_DESIGN_MODULES = [
   NzLayoutModule,
   NzDropDownModule,
@@ -89,7 +90,8 @@ const ANT_DESIGN_MODULES = [
   NzTagModule,
   NzUploadModule,
   NzDescriptionsModule,
-  NzInputModule
+  NzInputModule,
+  NzStatisticModule
 ];
 
 @NgModule({

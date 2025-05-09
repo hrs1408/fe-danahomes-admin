@@ -1,2 +1,41 @@
-.overview-wrapper{
+.overview-wrapper {
+  padding: 24px;
+}
+
+.overview-content {
+  .mt-4 {
+    margin-top: 24px;
+  }
+
+  .mb-2 {
+    margin-bottom: 8px;
+  }
+
+  nz-card {
+    margin-bottom: 24px;
+  }
+
+  [nz-row] {
+    margin-bottom: 24px;
+  }
+
+  nz-statistic {
+    ::ng-deep {
+      .ant-statistic-title {
+        font-size: 14px;
+      }
+      .ant-statistic-content {
+        font-size: 24px;
+      }
+    }
+  }
+
+  [nz-icon] {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  nz-tag {
+    margin: 4px;
+  }
 }
