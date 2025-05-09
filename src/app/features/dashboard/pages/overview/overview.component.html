@@ -4,19 +4,19 @@
       <!-- Thống kê tổng quan -->
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="stat-card products">
             <nz-statistic
               [nzValue]="summary.totalProducts"
               [nzTitle]="'Sản phẩm'"
               [nzPrefix]="productIcon"
             ></nz-statistic>
             <ng-template #productIcon>
-              <span nz-icon nzType="shopping" nzTheme="outline"></span>
+              <span nz-icon nzType="home" nzTheme="outline"></span>
             </ng-template>
           </nz-card>
         </div>
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="stat-card posts">
             <nz-statistic
               [nzValue]="summary.totalPosts"
               [nzTitle]="'Bài viết'"
@@ -28,7 +28,7 @@
           </nz-card>
         </div>
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="stat-card tags">
             <nz-statistic
               [nzValue]="summary.totalTags"
               [nzTitle]="'Tags'"
@@ -40,7 +40,7 @@
           </nz-card>
         </div>
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="stat-card categories">
             <nz-statistic
               [nzValue]="summary.totalCategories"
               [nzTitle]="'Danh mục'"
@@ -52,7 +52,7 @@
           </nz-card>
         </div>
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="stat-card users">
             <nz-statistic
               [nzValue]="summary.totalUsers"
               [nzTitle]="'Người dùng'"
@@ -64,7 +64,7 @@
           </nz-card>
         </div>
         <div nz-col [nzSpan]="4">
-          <nz-card>
+          <nz-card class="clock-card">
             <div class="clock-title">
               Giờ hiện tại
             </div>
@@ -77,7 +77,11 @@
       </div>
 
       <!-- Sản phẩm mới nhất -->
-      <nz-card class="mt-4" [nzTitle]="'Sản phẩm mới nhất'">
+      <nz-card class="mt-4" [nzTitle]="productTitle">
+        <ng-template #productTitle>
+          <span nz-icon nzType="home" nzTheme="outline"></span>
+          Sản phẩm mới nhất
+        </ng-template>
         <nz-table #productTable [nzData]="summary.recentProducts" [nzShowPagination]="false">
           <thead>
             <tr>
@@ -91,9 +95,7 @@
             <tr *ngFor="let product of summary.recentProducts">
               <td>{{ product.name }}</td>
               <td>{{ product.product_detail.type_product }}</td>
-              <td>
-                {{ product.address_detail.address }}
-              </td>
+              <td>{{ product.address_detail.address }}</td>
               <td>{{ product.product_detail.price | number }} VND</td>
             </tr>
           </tbody>
@@ -101,7 +103,11 @@
       </nz-card>
 
       <!-- Bài viết mới nhất -->
-      <nz-card class="mt-4" [nzTitle]="'Bài viết mới nhất'">
+      <nz-card class="mt-4" [nzTitle]="postTitle">
+        <ng-template #postTitle>
+          <span nz-icon nzType="file-text" nzTheme="outline"></span>
+          Bài viết mới nhất
+        </ng-template>
         <nz-table #postTable [nzData]="summary.recentPosts" [nzShowPagination]="false">
           <thead>
             <tr>
@@ -125,7 +131,11 @@
       </nz-card>
 
       <!-- Người dùng hoạt động -->
-      <nz-card class="mt-4" [nzTitle]="'Người dùng hoạt động'">
+      <nz-card class="mt-4" [nzTitle]="userTitle">
+        <ng-template #userTitle>
+          <span nz-icon nzType="user" nzTheme="outline"></span>
+          Người dùng hoạt động
+        </ng-template>
         <nz-table #userTable [nzData]="summary.activeUsers" [nzShowPagination]="false">
           <thead>
             <tr>
@@ -151,14 +161,22 @@
       <!-- Tags và Danh mục phổ biến -->
       <div nz-row [nzGutter]="16" class="mt-4">
         <div nz-col [nzSpan]="12">
-          <nz-card [nzTitle]="'Tags phổ biến'">
+          <nz-card [nzTitle]="tagTitle">
+            <ng-template #tagTitle>
+              <span nz-icon nzType="tags" nzTheme="outline"></span>
+              Tags phổ biến
+            </ng-template>
             <nz-tag *ngFor="let tag of summary.popularTags" [nzColor]="'blue'" class="mb-2">
               {{ tag.name }}
             </nz-tag>
           </nz-card>
         </div>
         <div nz-col [nzSpan]="12">
-          <nz-card [nzTitle]="'Danh mục phổ biến'">
+          <nz-card [nzTitle]="categoryTitle">
+            <ng-template #categoryTitle>
+              <span nz-icon nzType="folder" nzTheme="outline"></span>
+              Danh mục phổ biến
+            </ng-template>
             <nz-tag *ngFor="let category of summary.popularCategories" [nzColor]="'green'" class="mb-2">
               {{ category.name }}
             </nz-tag>
