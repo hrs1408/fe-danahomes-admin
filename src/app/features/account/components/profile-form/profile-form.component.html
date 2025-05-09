@@ -1,0 +1,37 @@
+<form nz-form [formGroup]="profileForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Họ và tên</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập họ và tên">
+      <input nz-input formControlName="full_name" placeholder="Nhập họ và tên" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Số điện thoại</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập số điện thoại">
+      <input nz-input formControlName="phone_number" placeholder="Nhập số điện thoại" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" nzRequired>Địa chỉ</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập địa chỉ">
+      <input nz-input formControlName="address" placeholder="Nhập địa chỉ" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Ngày sinh</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-date-picker formControlName="dob" nzFormat="DD/MM/YYYY" ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzSpan]="24">
+      <button nz-button nzType="primary" [nzLoading]="loading" type="submit">
+        Cập nhật thông tin
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

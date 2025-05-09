@@ -1,0 +1,33 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-card *ngIf="profile">
+    <nz-page-header [nzTitle]="'Thông tin tài khoản'">
+      <nz-page-header-extra>
+        <nz-tag [nzColor]="profile.is_active ? 'success' : 'error'">
+          {{ profile.is_active ? 'Đang hoạt động' : 'Đã khóa' }}
+        </nz-tag>
+      </nz-page-header-extra>
+    </nz-page-header>
+
+    <div class="profile-info">
+      <nz-descriptions [nzColumn]="1">
+        <nz-descriptions-item nzTitle="Email">
+          {{ profile.email }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Vai trò">
+          {{ profile.user_role }}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <nz-tabset>
+      <nz-tab nzTitle="Thông tin cá nhân">
+        <app-profile-form *ngIf="profile" [profile]="profile" (onSuccess)="loadProfile()"></app-profile-form>
+      </nz-tab>
+      <nz-tab nzTitle="Đổi mật khẩu">
+        <app-change-password-form></app-change-password-form>
+      </nz-tab>
+    </nz-tabset>
+  </nz-card>
+</nz-spin>

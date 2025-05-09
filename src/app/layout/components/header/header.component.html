@@ -45,7 +45,7 @@
       </a>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>
-          <li nz-menu-item>
+          <li nz-menu-item (click)="goToProfile()">
             <nz-icon nzType="user" nzTheme="outline" />
             <span class="ms-2">Thông tin tài khoản</span>
           </li>

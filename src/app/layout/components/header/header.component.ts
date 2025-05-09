@@ -33,4 +33,8 @@ export class HeaderComponent {
     this.userLoggedIn = JSON.parse(localStorage.getItem('user') || '{}');
     return this.userLoggedIn;
   }
+
+  goToProfile() {
+    this.router.navigate(['/account']);
+  }
 }
