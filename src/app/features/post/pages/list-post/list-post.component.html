@@ -88,7 +88,7 @@
   <ng-template #modalContent>
     <div class="post-info">
       <div class="post-cover" *ngIf="selectedPost?.image?.drive_id">
-        <img [src]="'https://lh3.googleusercontent.com/d/'+selectedPost?.image?.drive_id" [alt]="selectedPost?.title || ''">
+        <img [src]="'https://lh3.googleusercontent.com/d/'+selectedPost?.image?.drive_id" [alt]="selectedPost?.title || ''" onerror="this.src='assets/images/default_property.jpeg'">
       </div>
       <div class="post-meta mb-3">
         <nz-tag [nzColor]="getPostTypeColor(selectedPost?.post_type || '')">

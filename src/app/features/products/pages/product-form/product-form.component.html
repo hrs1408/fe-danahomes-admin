@@ -43,13 +43,30 @@
         </div>
 
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="24">
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+            <nz-form-item>
+              <nz-form-label>Thuộc dự án</nz-form-label>
+              <nz-form-control [nzErrorTip]="projectErrorTpl">
+                <nz-select formControlName="product_parent_id" nzPlaceHolder="Chọn dự án" [nzShowSearch]="true" nzAllowClear>
+                  <nz-option *ngFor="let project of projects" [nzValue]="project.id" [nzLabel]="project.name"></nz-option>
+                </nz-select>
+                <ng-template #projectErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">Vui lòng chọn dự án</ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
             <nz-form-item>
               <nz-form-label nzRequired>Danh mục</nz-form-label>
-              <nz-form-control nzErrorTip="Vui lòng chọn danh mục">
+              <nz-form-control [nzErrorTip]="categoryErrorTpl">
                 <nz-select formControlName="category_id" nzPlaceHolder="Chọn danh mục" [nzShowSearch]="true">
                   <nz-option *ngFor="let category of categories" [nzValue]="category.id" [nzLabel]="category.name"></nz-option>
                 </nz-select>
+                <ng-template #categoryErrorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">Vui lòng chọn danh mục</ng-container>
+                  <ng-container *ngIf="control.hasError('invalidCategory')">Không thể chọn danh mục này khi sản phẩm thuộc dự án</ng-container>
+                </ng-template>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -375,7 +392,7 @@
           [nzFooter]="null"
           (nzOnCancel)="previewVisible = false">
           <ng-template #modalContent>
-            <img [src]="previewImage" style="width: 100%" />
+            <img [src]="previewImage" style="width: 100%" onerror="this.src='assets/images/default_property.jpeg'" />
           </ng-template>
         </nz-modal>
 

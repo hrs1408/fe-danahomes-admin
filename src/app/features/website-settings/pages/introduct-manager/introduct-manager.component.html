@@ -22,7 +22,7 @@
         </nz-tag>
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="Hình ảnh">
-        <img *ngIf="imageUrl" [src]="imageUrl" class="preview-image" alt="Preview" />
+        <img *ngIf="imageUrl" [src]="imageUrl" class="preview-image" alt="Preview" onerror="this.src='assets/images/default_property.jpeg'"/>
         <span *ngIf="!imageUrl">Chưa có hình ảnh</span>
       </nz-descriptions-item>
     </nz-descriptions>
@@ -85,7 +85,7 @@
               <i class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></i>
               <div class="ant-upload-text">Tải ảnh lên</div>
             </ng-container>
-            <img *ngIf="imageUrl" [src]="imageUrl" class="avatar" />
+            <img *ngIf="imageUrl" [src]="imageUrl" class="avatar" onerror="this.src='assets/images/default_property.jpeg'"/>
           </nz-upload>
           <div class="upload-hint">Hỗ trợ file ảnh JPG, PNG dưới 2MB</div>
         </nz-form-control>

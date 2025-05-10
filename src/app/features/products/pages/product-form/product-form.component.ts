@@ -94,10 +94,9 @@ export class ProductFormComponent implements OnInit {
 
   // Product type options
   typeProducts = [
-    { label: 'Căn hộ', value: 'apartment' },
-    { label: 'Nhà phố', value: 'townhouse' },
-    { label: 'Biệt thự', value: 'villa' },
-    { label: 'Đất nền', value: 'land' }
+    { label: 'Bán', value: 'sell' },
+    { label: 'Cho thuê', value: 'rent' },
+    { label: 'Cho thuê lại', value: 'sublease' }
   ];
 
   projectTypes = [
@@ -135,6 +134,9 @@ export class ProductFormComponent implements OnInit {
   existingCoverImage: any = null;
   existingProductImages: any[] = [];
   removedImageIds: number[] = [];
+
+  // Thêm biến để lưu trữ danh sách dự án
+  projects: Product[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -187,18 +189,23 @@ export class ProductFormComponent implements OnInit {
 
     // Load categories
     this.loadCategories();
+
+    // Load danh sách dự án
+    this.loadProjects();
   }
 
   initMap(): void {
     if (!this.mapContainer) return;
 
     // Initialize the map
-    this.map = L.map(this.mapContainer.nativeElement).setView([16.0544, 108.2022], 13);
+    this.map = L.map(this.mapContainer.nativeElement, {
+      attributionControl: false
+    }).setView([16.0544, 108.2022], 13);
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© Danahomes',
     }).addTo(this.map);
 
     // Add marker
@@ -256,6 +263,8 @@ export class ProductFormComponent implements OnInit {
 
   updateAddressDetails(place: any): void {
     const address = place.address || {};
+    const lat = parseFloat(place.lat);
+    const lon = parseFloat(place.lon);
 
     // Log để kiểm tra dữ liệu từ API
     console.log('Raw address data:', address);
@@ -293,13 +302,19 @@ export class ProductFormComponent implements OnInit {
         province: getProvince(),
         district: getDistrict(),
         ward: getWard(),
-        google_address_link: `https://www.openstreetmap.org/?mlat=${place.lat}&mlon=${place.lon}#map=16/${place.lat}/${place.lon}`
+        google_address_link: `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`
       };
 
       // Log để kiểm tra kết quả mapping
       console.log('Mapped address values:', formValues);
 
       addressDetailForm.patchValue(formValues);
+
+      // Cập nhật vị trí map và marker
+      if (this.map && lat && lon) {
+        this.map.setView([lat, lon], 16);
+        this.marker.setLatLng([lat, lon]);
+      }
     }
   }
 
@@ -367,6 +382,7 @@ export class ProductFormComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
       slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
       category_id: [null, [Validators.required]],
+      product_parent_id: [null],
       address_detail: this.fb.group({
         address: ['', [Validators.required, Validators.minLength(10)]],
         province: ['', [Validators.required]],
@@ -397,6 +413,17 @@ export class ProductFormComponent implements OnInit {
       product_images: [[]]
     });
 
+    // Thêm validator cho category_id khi có product_parent_id
+    this.productForm.get('product_parent_id')?.valueChanges.subscribe(value => {
+      const categoryControl = this.productForm.get('category_id');
+      if (value) {
+        categoryControl?.addValidators(this.categoryValidator.bind(this));
+      } else {
+        categoryControl?.removeValidators(this.categoryValidator.bind(this));
+      }
+      categoryControl?.updateValueAndValidity();
+    });
+
     this.updateValidators();
   }
 
@@ -411,12 +438,30 @@ export class ProductFormComponent implements OnInit {
           name: product.name,
           slug: product.slug,
           category_id: product.category_id,
+          product_parent_id: product.product_parent_id,
           address_detail: product.address_detail,
           product_detail: product.product_detail,
           tag_ids: product.tag?.map(tag => tag.id) || []
         });
 
-        // Phân loại và load ảnh
+        // Cập nhật vị trí trên bản đồ từ google_address_link
+        const addressLink = product.address_detail.google_address_link;
+        if (addressLink && this.map) {
+          const matches = addressLink.match(/mlat=([\d.]+)&mlon=([\d.]+)/);
+          if (matches) {
+            const lat = parseFloat(matches[1]);
+            const lon = parseFloat(matches[2]);
+
+            // Cập nhật vị trí map và marker
+            this.map.setView([lat, lon], 16);
+            this.marker.setLatLng([lat, lon]);
+
+            // Cập nhật searchQuery để hiển thị trong ô tìm kiếm
+            this.searchQuery = product.address_detail.address;
+          }
+        }
+
+        // Xử lý ảnh
         if (product.images?.length) {
           // Lọc ảnh bìa
           const coverImage = product.images.find(img => img.file_type === 'cover');
@@ -532,6 +577,7 @@ export class ProductFormComponent implements OnInit {
           name: formValue.name,
           slug: formValue.slug,
           category_id: formValue.category_id || 0,
+          product_parent_id: formValue.product_parent_id || null,
           address_detail: {
             address: formValue.address_detail.address,
             province: formValue.address_detail.province,
@@ -645,4 +691,29 @@ export class ProductFormComponent implements OnInit {
     if (!value) return 0;
     return Number(value.replace(/[^\d]/g, ''));
   };
+
+  // Thêm validator cho category_id
+  categoryValidator(control: AbstractControl): ValidationErrors | null {
+    const categoryId = control.value;
+    const productParentId = this.productForm.get('product_parent_id')?.value;
+
+    if (productParentId && categoryId === 7) {
+      return { invalidCategory: true };
+    }
+    return null;
+  }
+
+  // Thêm phương thức load danh sách dự án
+  loadProjects(): void {
+    this.productService.getProductByProject().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.projects = response.data;
+        }
+      },
+      error: (error) => {
+        this.message.error('Có lỗi xảy ra khi tải danh sách dự án');
+      }
+    });
+  }
 }

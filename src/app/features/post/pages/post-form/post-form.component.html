@@ -62,7 +62,7 @@
               [src]="imageUrl"
               style="width: 100%; height: 100%; object-fit: cover;"
               [alt]="'Preview'"
-              (error)="imageUrl = null" />
+              (error)="imageUrl = null" onerror="this.src='assets/images/default_property.jpeg'" />
           </nz-upload>
         </nz-form-control>
       </nz-form-item>

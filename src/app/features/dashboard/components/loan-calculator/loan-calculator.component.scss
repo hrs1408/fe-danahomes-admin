@@ -5,7 +5,6 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
   .loan-form {
-    max-width: 600px;
     margin: 0 auto 32px;
     background: #fafafa;
     padding: 24px;
@@ -132,12 +131,6 @@
                 font-family: 'Roboto', sans-serif;
                 text-align: right;
                 font-weight: 500;
-
-                // Thêm đơn vị tiền tệ
-                &::after {
-                  content: ' ₫';
-                  color: #8c8c8c;
-                }
               }
 
               // Cột tháng

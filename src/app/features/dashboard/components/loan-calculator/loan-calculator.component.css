@@ -1,0 +1,157 @@
+.loan-calculator {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.loan-calculator .loan-form {
+  margin: 0 auto 32px;
+  background: #fafafa;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.loan-calculator .loan-form nz-form-item {
+  margin-bottom: 24px;
+}
+
+.loan-calculator .loan-form nz-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.loan-calculator .loan-form nz-form-label {
+  font-weight: 600;
+  color: #262626;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.loan-calculator .loan-form ::ng-deep .ant-input-number {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.loan-calculator .loan-form ::ng-deep .ant-input-number:hover {
+  border-color: #40a9ff;
+}
+
+.loan-calculator .loan-form ::ng-deep .ant-input-number-focused {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.loan-calculator .loan-form ::ng-deep .ant-input-number-handler-wrap {
+  border-radius: 0 6px 6px 0;
+}
+
+.loan-calculator .loan-summary nz-row {
+  margin-bottom: 32px;
+}
+
+.loan-calculator .loan-summary nz-card {
+  height: 100%;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: none;
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.loan-calculator .loan-summary nz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.loan-calculator .loan-summary nz-card ::ng-deep .ant-card-body {
+  padding: 24px;
+}
+
+.loan-calculator .loan-summary nz-card ::ng-deep .ant-statistic .ant-statistic-title {
+  font-size: 15px;
+  color: #595959;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.loan-calculator .loan-summary nz-card ::ng-deep .ant-statistic .ant-statistic-content {
+  font-size: 28px;
+  font-weight: 600;
+  background: linear-gradient(45deg, #1890ff, #40a9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loan-calculator .loan-summary nz-card ::ng-deep .ant-statistic .ant-statistic-content-prefix {
+  font-size: 18px;
+  margin-right: 4px;
+  -webkit-text-fill-color: #595959;
+}
+
+.loan-calculator .loan-summary nz-card ::ng-deep .ant-statistic .ant-statistic-content-value {
+  font-family: 'Roboto', sans-serif;
+}
+
+.loan-calculator .loan-summary nz-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-thead > tr > th {
+  background-color: #fafafa;
+  font-weight: 600;
+  padding: 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #262626;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td {
+  padding: 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td:nth-child(2), .loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td:nth-child(3), .loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td:nth-child(4), .loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td:nth-child(5) {
+  font-family: 'Roboto', sans-serif;
+  text-align: right;
+  font-weight: 500;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr > td:first-child {
+  font-weight: 600;
+  color: #262626;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr:hover > td {
+  background-color: #fafafa;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-pagination {
+  margin: 16px;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-pagination-item {
+  border-radius: 4px;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-pagination-item-active {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.loan-calculator .loan-summary nz-table ::ng-deep .ant-pagination-item-active a {
+  color: white;
+}
+
+.loan-calculator .mt-4 {
+  margin-top: 32px;
+}

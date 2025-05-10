@@ -48,15 +48,18 @@ export interface Product {
   slug: string;
   name: string;
   category_id: number;
+  product_parent_id?: number;
   address_detail: AddressDetail;
   product_detail: ProductDetail;
-  tag: Tag[];
-  images: Image[];
+  tag?: Tag[];
+  images?: Image[];
 }
 
 export interface ProductRequest {
   name: string;
   slug: string;
+  category_id: number;
+  product_parent_id?: number;
   address_detail: AddressDetail;
   product_detail: ProductDetail;
   tag_ids: number[];

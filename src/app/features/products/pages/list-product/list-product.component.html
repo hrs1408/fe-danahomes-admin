@@ -37,7 +37,7 @@
             <nz-avatar
               [nzSize]="64"
               [nzShape]="'square'"
-              [nzSrc]="'https://lh3.googleusercontent.com/d/'+(product.images[0]?.drive_id ?? '')"
+              [nzSrc]="'https://lh3.googleusercontent.com/d/' + (product?.images?.[0]?.drive_id ?? '')"
               [nzAlt]="product.name">
             </nz-avatar>
           </td>

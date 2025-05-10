@@ -53,7 +53,15 @@ export class IconService {
     'red-envelope-ant', 'rest-ant', 'rocket-ant', 'safety-certificate-ant', 'save-ant', 'schedule-ant',
     'security-scan-ant', 'setting-ant', 'shop-ant', 'shopping-ant', 'skin-ant', 'smile-ant', 'sound-ant', 'star-ant',
     'switcher-ant', 'tablet-ant', 'tag-ant', 'tags-ant', 'tool-ant', 'thunderbolt-ant', 'trophy-ant',
-    'unlock-ant', 'usb-ant', 'video-camera-ant', 'wallet-ant'
+    'unlock-ant', 'usb-ant', 'video-camera-ant', 'wallet-ant',
+
+    // Real Estate and Home Icons
+    'key-ant', 'compass-ant', 'home-ant', 'apartment-ant', 'bank-ant', 'building-ant', 'cluster-ant', 'shop-ant',
+    'deployment-unit-ant', 'field-time-ant', 'gateway-ant', 'global-ant', 'gold-ant', 'dollar-ant',
+    'property-safety-ant', 'safety-ant', 'security-scan-ant', 'audit-ant', 'transaction-ant', 'trophy-ant',
+    'environment-ant', 'experiment-ant', 'filter-ant', 'fire-ant', 'fund-ant', 'insurance-ant', 'layout-ant',
+    'partition-ant', 'percentage-ant', 'picture-ant', 'history-ant', 'area-chart-ant', 'pie-chart-ant',
+    'bar-chart-ant', 'line-chart-ant', 'heat-map-ant', 'rise-ant', 'stock-ant', 'branches-ant'
   ];
 
   private materialIcons = [
@@ -126,7 +134,22 @@ export class IconService {
     'ac_unit-mat', 'airport_shuttle-mat', 'all_inclusive-mat', 'beach_access-mat', 'business_center-mat',
     'casino-mat', 'child_care-mat', 'child_friendly-mat', 'fitness_center-mat', 'free_breakfast-mat',
     'golf_course-mat', 'hot_tub-mat', 'kitchen-mat', 'meeting_room-mat', 'no_meeting_room-mat',
-    'pool-mat', 'room_service-mat', 'rv_hookup-mat', 'smoke_free-mat', 'smoking_rooms-mat', 'spa-mat'
+    'pool-mat', 'room_service-mat', 'rv_hookup-mat', 'smoke_free-mat', 'smoking_rooms-mat', 'spa-mat',
+
+    // Real Estate and Home Icons
+    'apartment-mat', 'house-mat', 'house_siding-mat', 'location_city-mat', 'villa-mat', 'domain-mat',
+    'bungalow-mat', 'holiday_village-mat', 'cottage-mat', 'gite-mat', 'cabin-mat', 'corporate_fare-mat',
+    'storefront-mat', 'store-mat', 'balcony-mat', 'fence-mat', 'deck-mat', 'yard-mat', 'pool-mat',
+    'grass-mat', 'nest_cam_wired_stand-mat', 'door_front-mat', 'door_back-mat', 'door_sliding-mat',
+    'garage-mat', 'gate-mat', 'chair-mat', 'chair_alt-mat', 'bed-mat', 'bathtub-mat', 'bathroom-mat',
+    'shower-mat', 'propane-mat', 'propane_tank-mat', 'fireplace-mat', 'countertops-mat', 'microwave-mat',
+    'stove-mat', 'grill-mat', 'houseboat-mat', 'night_shelter-mat', 'roofing-mat', 'sensor_door-mat',
+    'sensor_window-mat', 'stairs-mat', 'elevator-mat', 'local_parking-mat', 'local_atm-mat', 'set_meal-mat',
+    'washing_machine-mat', 'mode_fan-mat', 'air-mat', 'thermostat-mat', 'devices-mat', 'outlet-mat',
+    'vpn_key-mat', 'meeting_room-mat', 'room_preferences-mat', 'map-mat', 'my_location-mat',
+    'location_on-mat', 'add_location-mat', 'add_location_alt-mat', 'money-mat', 'sell-mat', 'payments-mat',
+    'real_estate_agent-mat', 'format_list_numbered-mat', 'format_list_bulleted-mat', 'lightbulb-mat',
+    'wb_sunny-mat'
   ];
 
   constructor() {}

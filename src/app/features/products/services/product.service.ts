@@ -54,4 +54,8 @@ export class ProductService {
   deleteImage(imageId: number, driveId: string): Observable<any> {
     return this.http.delete(`${this.apiMediaUrl}/delete?id=${imageId}&drive_id=${driveId}`);
   }
+
+  getProductByProject(): Observable<ProductListResponse> {
+    return this.http.get<ProductListResponse>(`${this.apiUrl}/product-by-project`);
+  }
 }
