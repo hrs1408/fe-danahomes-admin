@@ -23,8 +23,9 @@
         <tr>
           <th>STT</th>
           <th>Hình ảnh</th>
-          <th>Tên sản phẩm</th>
-          <th>Địa chỉ</th>
+          <th [nzWidth]="'250px'">Tên sản phẩm</th>
+          <th [nzWidth]="'300px'">Địa chỉ</th>
+          <th>Loại hình</th>
           <th>Thông tin</th>
           <th>Giá</th>
           <th>Thao tác</th>
@@ -41,15 +42,49 @@
               [nzAlt]="product.name">
             </nz-avatar>
           </td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.address_detail.address }}</td>
+          <td class="name-cell">{{ product.name }}</td>
+          <td class="address-cell">{{ product.address_detail.address }}</td>
           <td>
-            <div>{{ product.product_detail.bedroom }} phòng ngủ</div>
-            <div>{{ product.product_detail.bathroom }} phòng tắm</div>
-            <div>{{ product.product_detail.area }}m²</div>
+            <nz-tag [nzColor]="'blue'" *ngIf="product.category_id === 7">Dự án</nz-tag>
+            <nz-tag [nzColor]="'green'" *ngIf="product.product_detail.type_product === 'sale'">Mua bán</nz-tag>
+            <nz-tag [nzColor]="'orange'" *ngIf="product.product_detail.type_product === 'rent'">Cho thuê</nz-tag>
+          </td>
+          <td>
+            <div class="product-info-cell">
+              <!-- Thông tin chung -->
+              <div>Diện tích: {{ product.product_detail.area }}m²</div>
+
+              <!-- Thông tin cho Dự án -->
+              <ng-container *ngIf="product.category_id === 7">
+                <div>Loại dự án: {{ product.product_detail.project_type === 'luxury_apartment' ? 'Căn hộ cao cấp' :
+                                   product.product_detail.project_type === 'urban_area' ? 'Khu đô thị' :
+                                   product.product_detail.project_type === 'resort' ? 'Khu nghỉ dưỡng' :
+                                   product.product_detail.project_type === 'complex' ? 'Khu phức hợp' : 'N/A' }}</div>
+                <div>Trạng thái: {{ product.product_detail.project_status === 'selling' ? 'Đang mở bán' :
+                                   product.product_detail.project_status === 'coming_soon' ? 'Sắp mở bán' :
+                                   product.product_detail.project_status === 'delivered' ? 'Đã bàn giao' :
+                                   product.product_detail.project_status === 'completed' ? 'Đã hoàn thành' : 'N/A' }}</div>
+                <div>Chủ đầu tư: {{ product.product_detail.investor || 'N/A' }}</div>
+              </ng-container>
+
+              <!-- Thông tin cho Cho thuê -->
+              <ng-container *ngIf="product.product_detail.type_product === 'rent'">
+                <div *ngIf="product.product_detail.bedroom">{{ product.product_detail.bedroom }} phòng ngủ</div>
+                <div *ngIf="product.product_detail.bathroom">{{ product.product_detail.bathroom }} phòng tắm</div>
+                <div *ngIf="product.product_detail.eletric_price">Giá điện: {{ formatPrice(product.product_detail.eletric_price) }}/kwh</div>
+                <div *ngIf="product.product_detail.water_price">Giá nước: {{ formatPrice(product.product_detail.water_price) }}/m³</div>
+                <div *ngIf="product.product_detail.internet_price">Giá internet: {{ formatPrice(product.product_detail.internet_price) }}/tháng</div>
+              </ng-container>
+
+              <!-- Thông tin cho Mua bán -->
+              <ng-container *ngIf="product.product_detail.type_product === 'sale'">
+                <div *ngIf="product.product_detail.bedroom">{{ product.product_detail.bedroom }} phòng ngủ</div>
+                <div *ngIf="product.product_detail.bathroom">{{ product.product_detail.bathroom }} phòng tắm</div>
+              </ng-container>
+            </div>
           </td>
           <td>{{ formatPrice(product.product_detail.price) }}</td>
-          <td>
+          <td class="action-buttons">
             <a nz-button nzType="link" (click)="viewProduct(product)" nz-tooltip nzTooltipTitle="Xem chi tiết">
               <i nz-icon nzType="eye"></i>
             </a>
@@ -104,45 +139,72 @@
           <nz-descriptions-item nzTitle="Diện tích">
             {{ selectedProduct?.product_detail?.area ?? 0 }}m²
           </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Số phòng ngủ">
-            {{ selectedProduct?.product_detail?.bedroom ?? 0 }}
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Số phòng tắm">
-            {{ selectedProduct?.product_detail?.bathroom ?? 0 }}
+          <nz-descriptions-item nzTitle="Loại hình">
+            <nz-tag [nzColor]="'blue'" *ngIf="selectedProduct?.category_id === 7">Dự án</nz-tag>
+            <nz-tag [nzColor]="'green'" *ngIf="selectedProduct?.product_detail?.type_product === 'sell'">Mua bán</nz-tag>
+            <nz-tag [nzColor]="'orange'" *ngIf="selectedProduct?.product_detail?.type_product === 'rent'">Cho thuê</nz-tag>
           </nz-descriptions-item>
           <nz-descriptions-item nzTitle="Giá" [nzSpan]="2">
-            {{ formatPrice(selectedProduct?.product_detail?.price ?? 0) }}
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Loại sản phẩm">
-            {{ selectedProduct?.product_detail?.type_product ?? 'N/A' }}
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Chủ đầu tư">
-            {{ selectedProduct?.product_detail?.investor ?? 'N/A' }}
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Loại dự án">
-            {{ selectedProduct?.product_detail?.project_type ?? 'N/A' }}
-          </nz-descriptions-item>
-          <nz-descriptions-item nzTitle="Trạng thái dự án">
-            {{ selectedProduct?.product_detail?.project_status ?? 'N/A' }}
+            {{ formatPrice(selectedProduct?.product_detail?.price || 0) }}
+            <span *ngIf="selectedProduct?.product_detail?.price_to"> - {{ formatPrice(selectedProduct?.product_detail?.price_to || 0) }}</span>
           </nz-descriptions-item>
         </nz-descriptions>
 
-        <div class="utility-prices mt-4">
-          <h3>Chi phí tiện ích</h3>
-          <nz-descriptions [nzColumn]="3" nzBordered>
-            <nz-descriptions-item nzTitle="Giá điện">
-              {{ formatPrice(selectedProduct?.product_detail?.eletric_price ?? 0) }}/tháng
+        <div class="room-info mt-4" *ngIf="selectedProduct?.product_detail?.bedroom || selectedProduct?.product_detail?.bathroom">
+          <h3>Thông tin phòng</h3>
+          <nz-descriptions [nzColumn]="2" nzBordered>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.bedroom" nzTitle="Số phòng ngủ">
+              {{ selectedProduct?.product_detail?.bedroom }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Giá nước">
-              {{ formatPrice(selectedProduct?.product_detail?.water_price ?? 0) }}/tháng
-            </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Giá internet">
-              {{ formatPrice(selectedProduct?.product_detail?.internet_price ?? 0) }}/tháng
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.bathroom" nzTitle="Số phòng tắm">
+              {{ selectedProduct?.product_detail?.bathroom }}
             </nz-descriptions-item>
           </nz-descriptions>
         </div>
 
-        <div class="tags mt-4">
+        <div class="project-info mt-4" *ngIf="selectedProduct?.category_id === 7">
+          <h3>Thông tin dự án</h3>
+          <nz-descriptions [nzColumn]="2" nzBordered>
+            <nz-descriptions-item nzTitle="Chủ đầu tư">
+              {{ selectedProduct?.product_detail?.investor ?? 'N/A' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Loại dự án">
+              {{ selectedProduct?.product_detail?.project_type ?? 'N/A' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Trạng thái dự án" [nzSpan]="2">
+              {{ selectedProduct?.product_detail?.project_status ?? 'N/A' }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+
+        <div class="utility-prices mt-4" *ngIf="selectedProduct?.product_detail?.type_product === 'rent'">
+          <h3>Chi phí tiện ích</h3>
+          <nz-descriptions [nzColumn]="3" nzBordered>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.eletric_price" nzTitle="Giá điện">
+              {{ formatPrice(selectedProduct?.product_detail?.eletric_price || 0) }}/tháng
+            </nz-descriptions-item>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.water_price" nzTitle="Giá nước">
+              {{ formatPrice(selectedProduct?.product_detail?.water_price || 0) }}/tháng
+            </nz-descriptions-item>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.internet_price" nzTitle="Giá internet">
+              {{ formatPrice(selectedProduct?.product_detail?.internet_price || 0) }}/tháng
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+
+        <div class="amenities mt-4" *ngIf="selectedProduct?.product_detail?.utilities || selectedProduct?.product_detail?.interiol">
+          <h3>Tiện ích & Nội thất</h3>
+          <nz-descriptions [nzColumn]="2" nzBordered>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.utilities" nzTitle="Tiện ích" [nzSpan]="2">
+              {{ selectedProduct?.product_detail?.utilities }}
+            </nz-descriptions-item>
+            <nz-descriptions-item *ngIf="selectedProduct?.product_detail?.interiol" nzTitle="Nội thất" [nzSpan]="2">
+              {{ selectedProduct?.product_detail?.interiol }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </div>
+
+        <div class="tags mt-4" *ngIf="selectedProduct?.tag?.length">
           <h3>Tags</h3>
           <nz-tag *ngFor="let tag of selectedProduct?.tag" [nzColor]="tag.color">
             {{ tag.name }}

@@ -72,6 +72,19 @@
           </div>
         </div>
 
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>Loại hình sản phẩm</nz-form-label>
+              <nz-form-control nzErrorTip="Vui lòng chọn loại hình sản phẩm">
+                <nz-select formControlName="type_product" nzPlaceHolder="Chọn loại hình sản phẩm">
+                  <nz-option *ngFor="let type of typeProducts" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
         <!-- Địa chỉ và bản đồ -->
         <nz-divider nzText="Địa chỉ và vị trí">
           <i nz-icon nzType="environment" style="margin-right: 8px;"></i>
@@ -152,22 +165,25 @@
 
         <div formGroupName="product_detail">
           <div nz-row [nzGutter]="24">
+            <!-- Số phòng ngủ - chung cho tất cả -->
             <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
               <nz-form-item>
-                <nz-form-label nzRequired>Số phòng ngủ</nz-form-label>
-                <nz-form-control nzErrorTip="Vui lòng nhập số phòng ngủ">
+                <nz-form-label>Số phòng ngủ</nz-form-label>
+                <nz-form-control>
                   <nz-input-number formControlName="bedroom" [nzMin]="0" [nzStep]="1" [nzPrecision]="0"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <!-- Số phòng tắm - chung cho tất cả -->
             <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
               <nz-form-item>
-                <nz-form-label nzRequired>Số phòng tắm</nz-form-label>
-                <nz-form-control nzErrorTip="Vui lòng nhập số phòng tắm">
+                <nz-form-label>Số phòng tắm</nz-form-label>
+                <nz-form-control>
                   <nz-input-number formControlName="bathroom" [nzMin]="0" [nzStep]="1" [nzPrecision]="0"></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <!-- Diện tích - chung cho tất cả -->
             <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
               <nz-form-item>
                 <nz-form-label nzRequired>Diện tích (m²)</nz-form-label>
@@ -178,6 +194,7 @@
             </div>
           </div>
 
+          <!-- Giá từ và giá đến - chung cho tất cả -->
           <div nz-row [nzGutter]="24">
             <div nz-col [nzXs]="24" [nzSm]="12">
               <nz-form-item>
@@ -193,11 +210,10 @@
             </div>
             <div nz-col [nzXs]="24" [nzSm]="12">
               <nz-form-item>
-                <nz-form-label nzRequired>Giá đến</nz-form-label>
+                <nz-form-label>Giá đến</nz-form-label>
                 <nz-form-control [nzErrorTip]="priceToErrorTpl">
                   <nz-input-number formControlName="price_to" [nzMin]="0" [nzStep]="1000000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
                   <ng-template #priceToErrorTpl let-control>
-                    <ng-container *ngIf="control.hasError('required')">Vui lòng nhập giá</ng-container>
                     <ng-container *ngIf="control.hasError('min')">Giá phải lớn hơn 0</ng-container>
                     <ng-container *ngIf="control.parent?.hasError('priceRange')">Giá đến phải lớn hơn giá từ</ng-container>
                   </ng-template>
@@ -206,40 +222,34 @@
             </div>
           </div>
 
-          <div nz-row [nzGutter]="24">
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label nzRequired>Loại sản phẩm</nz-form-label>
-                <nz-form-control nzErrorTip="Vui lòng chọn loại sản phẩm">
-                  <nz-select formControlName="type_product" nzPlaceHolder="Chọn loại sản phẩm">
-                    <nz-option *ngFor="let type of typeProducts" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
+          <!-- Các trường chỉ hiển thị cho dự án (category_id === 7) -->
+          <ng-container *ngIf="productForm.get('category_id')?.value === 7">
+            <div nz-row [nzGutter]="24">
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>Loại dự án</nz-form-label>
+                  <nz-form-control nzErrorTip="Vui lòng chọn loại dự án">
+                    <nz-select formControlName="project_type" nzPlaceHolder="Chọn loại dự án">
+                      <nz-option *ngFor="let type of projectTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>Trạng thái dự án</nz-form-label>
+                  <nz-form-control nzErrorTip="Vui lòng chọn trạng thái dự án">
+                    <nz-select formControlName="project_status" nzPlaceHolder="Chọn trạng thái">
+                      <nz-option *ngFor="let status of projectStatus" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
             </div>
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label nzRequired>Loại dự án</nz-form-label>
-                <nz-form-control nzErrorTip="Vui lòng chọn loại dự án">
-                  <nz-select formControlName="project_type" nzPlaceHolder="Chọn loại dự án">
-                    <nz-option *ngFor="let type of projectTypes" [nzValue]="type.value" [nzLabel]="type.label"></nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label nzRequired>Trạng thái dự án</nz-form-label>
-                <nz-form-control nzErrorTip="Vui lòng chọn trạng thái dự án">
-                  <nz-select formControlName="project_status" nzPlaceHolder="Chọn trạng thái">
-                    <nz-option *ngFor="let status of projectStatus" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
+          </ng-container>
 
-          <div nz-row [nzGutter]="24">
+          <!-- Chủ đầu tư - chỉ hiển thị cho dự án -->
+          <div nz-row [nzGutter]="24" *ngIf="productForm.get('category_id')?.value === 7">
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label nzRequired>Chủ đầu tư</nz-form-label>
@@ -250,40 +260,42 @@
             </div>
           </div>
 
-          <!-- Chi phí tiện ích -->
-          <nz-divider nzText="Chi phí tiện ích">
-            <i nz-icon nzType="dollar" style="margin-right: 8px;"></i>
-            Chi phí tiện ích
-          </nz-divider>
+          <!-- Chi phí tiện ích - chỉ hiển thị cho cho thuê (type_product === 'rent') -->
+          <ng-container *ngIf="productForm.get('product_detail.type_product')?.value === 'rent'">
+            <nz-divider nzText="Chi phí tiện ích">
+              <i nz-icon nzType="dollar" style="margin-right: 8px;"></i>
+              Chi phí tiện ích
+            </nz-divider>
 
-          <div nz-row [nzGutter]="24">
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label>Giá điện (VNĐ/tháng)</nz-form-label>
-                <nz-form-control>
-                  <nz-input-number formControlName="eletric_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
+            <div nz-row [nzGutter]="24">
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-form-item>
+                  <nz-form-label>Giá điện (VNĐ/tháng)</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="eletric_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-form-item>
+                  <nz-form-label>Giá nước (VNĐ/tháng)</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="water_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-form-item>
+                  <nz-form-label>Giá internet (VNĐ/tháng)</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number formControlName="internet_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
             </div>
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label>Giá nước (VNĐ/tháng)</nz-form-label>
-                <nz-form-control>
-                  <nz-input-number formControlName="water_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
-              <nz-form-item>
-                <nz-form-label>Giá internet (VNĐ/tháng)</nz-form-label>
-                <nz-form-control>
-                  <nz-input-number formControlName="internet_price" [nzMin]="0" [nzStep]="1000" [nzFormatter]="formatterVND" [nzParser]="parserVND"></nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
+          </ng-container>
 
-          <!-- Tiện ích và nội thất -->
+          <!-- Tiện ích và nội thất - chung cho tất cả -->
           <div nz-row [nzGutter]="24">
             <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
               <nz-form-item>
@@ -323,8 +335,8 @@
         </nz-divider>
 
         <nz-form-item>
-          <nz-form-label nzRequired>Tags</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng chọn ít nhất 1 tag">
+          <nz-form-label>Tags</nz-form-label>
+          <nz-form-control>
             <nz-select formControlName="tag_ids"
                       nzMode="multiple"
                       nzPlaceHolder="Chọn tags"

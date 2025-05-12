@@ -96,7 +96,6 @@ export class ProductFormComponent implements OnInit {
   typeProducts = [
     { label: 'Bán', value: 'sell' },
     { label: 'Cho thuê', value: 'rent' },
-    { label: 'Cho thuê lại', value: 'sublease' }
   ];
 
   projectTypes = [
@@ -114,9 +113,8 @@ export class ProductFormComponent implements OnInit {
   ];
 
   investmentTypes = [
-    { label: 'Mua bán', value: 'buy_sell' },
+    { label: 'Mua bán', value: 'sell' },
     { label: 'Cho thuê', value: 'rent' },
-    { label: 'Cho thuê lại', value: 'sublease' }
   ];
 
   // Thêm properties cho ảnh
@@ -383,6 +381,7 @@ export class ProductFormComponent implements OnInit {
       slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
       category_id: [null, [Validators.required]],
       product_parent_id: [null],
+      type_product: ['', [Validators.required]],
       address_detail: this.fb.group({
         address: ['', [Validators.required, Validators.minLength(10)]],
         province: ['', [Validators.required]],
@@ -391,26 +390,25 @@ export class ProductFormComponent implements OnInit {
         google_address_link: ['', [Validators.required, Validators.pattern(/^https?:\/\/.*/)]],
       }),
       product_detail: this.fb.group({
-        bedroom: [0, [Validators.required, Validators.min(0)]],
-        bathroom: [0, [Validators.required, Validators.min(0)]],
+        bedroom: [0],
+        bathroom: [0],
         area: [0, [Validators.required, Validators.min(0)]],
         price: [0, [Validators.required, Validators.min(0)]],
-        price_to: [0, [Validators.required, Validators.min(0)]],
+        price_to: [0, [Validators.min(0)]],
         content: ['', [Validators.required, Validators.minLength(100)]],
-        type_product: ['', [Validators.required]],
-        investor: ['', [Validators.required, Validators.minLength(3)]],
-        project_type: ['', [Validators.required]],
-        project_status: ['', [Validators.required]],
+        investor: [''],
+        project_type: [''],
+        project_status: [''],
         type_of_investment: [''],
-        eletric_price: [0, [Validators.min(0)]],
-        water_price: [0, [Validators.min(0)]],
-        internet_price: [0, [Validators.min(0)]],
+        eletric_price: [0],
+        water_price: [0],
+        internet_price: [0],
         utilities: [''],
         interiol: ['']
       }, { validators: this.priceRangeValidator }),
-      tag_ids: [[], [Validators.required, Validators.minLength(1)]],
-      cover_image: [null],
-      product_images: [[]]
+      tag_ids: [[]],
+      cover_image: [null, [Validators.required]],
+      product_images: [[], [Validators.required, Validators.minLength(1)]]
     });
 
     // Thêm validator cho category_id khi có product_parent_id
@@ -422,6 +420,48 @@ export class ProductFormComponent implements OnInit {
         categoryControl?.removeValidators(this.categoryValidator.bind(this));
       }
       categoryControl?.updateValueAndValidity();
+    });
+
+    // Thêm validator cho các trường của dự án khi category_id === 7
+    this.productForm.get('category_id')?.valueChanges.subscribe(value => {
+      const projectTypeControl = this.productForm.get('product_detail.project_type');
+      const projectStatusControl = this.productForm.get('product_detail.project_status');
+      const investorControl = this.productForm.get('product_detail.investor');
+
+      if (value === 7) {
+        projectTypeControl?.addValidators([Validators.required]);
+        projectStatusControl?.addValidators([Validators.required]);
+        investorControl?.addValidators([Validators.required, Validators.minLength(3)]);
+      } else {
+        projectTypeControl?.clearValidators();
+        projectStatusControl?.clearValidators();
+        investorControl?.clearValidators();
+      }
+
+      projectTypeControl?.updateValueAndValidity();
+      projectStatusControl?.updateValueAndValidity();
+      investorControl?.updateValueAndValidity();
+    });
+
+    // Thêm validator cho các trường của cho thuê khi type_product === 'rent'
+    this.productForm.get('type_product')?.valueChanges.subscribe(value => {
+      const eletricPriceControl = this.productForm.get('product_detail.eletric_price');
+      const waterPriceControl = this.productForm.get('product_detail.water_price');
+      const internetPriceControl = this.productForm.get('product_detail.internet_price');
+
+      if (value === 'rent') {
+        eletricPriceControl?.clearValidators();
+        waterPriceControl?.clearValidators();
+        internetPriceControl?.clearValidators();
+      } else {
+        eletricPriceControl?.clearValidators();
+        waterPriceControl?.clearValidators();
+        internetPriceControl?.clearValidators();
+      }
+
+      eletricPriceControl?.updateValueAndValidity();
+      waterPriceControl?.updateValueAndValidity();
+      internetPriceControl?.updateValueAndValidity();
     });
 
     this.updateValidators();
