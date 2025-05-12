@@ -18,9 +18,11 @@ export class ListPostComponent implements OnInit {
   selectedPost: Post | null = null;
 
   postTypes = [
+    { value: 'featured', label: 'Tin nổi bật', color: 'red' },
     { value: 'news', label: 'Tin tức', color: 'blue' },
     { value: 'event', label: 'Sự kiện', color: 'green' },
-    { value: 'promotion', label: 'Khuyến mãi', color: 'orange' }
+    { value: 'promotion', label: 'Khuyến mãi', color: 'orange' },
+    { valie: 'fengshui', label: 'Tư vấn phong thuỷ', color: 'purple' },
   ];
 
   constructor(

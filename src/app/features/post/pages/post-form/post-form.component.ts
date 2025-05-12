@@ -22,8 +22,10 @@ export class PostFormComponent implements OnInit {
 
   postTypes = [
     { label: 'Tin tức', value: 'news' },
+    { label: 'Tin nổi bật', value: 'featured' },
+    { label: 'Tư vấn phong thuỷ', value: 'fengshui' },
+    { label: 'Khuyến mãi', value: 'promotion' },
     { label: 'Sự kiện', value: 'event' },
-    { label: 'Khuyến mãi', value: 'promotion' }
   ];
 
   tinymceConfig: RawEditorOptions = {
