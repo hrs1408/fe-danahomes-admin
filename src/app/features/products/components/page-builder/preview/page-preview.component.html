@@ -2,92 +2,120 @@
   <div class="preview-content">
     <ng-container *ngFor="let block of content.blocks">
       <!-- Layout Section -->
-      <div *ngIf="isLayoutSection(block)" class="preview-block layout-section" [style.--columns]="block.columns" [style.--gap]="block.columnGap + 'px'">
-        <div class="layout-grid">
-          <ng-container *ngFor="let layoutBlock of getLayoutBlocks(block)">
-            <!-- Slider Block -->
-            <div *ngIf="isSliderBlock(layoutBlock)" class="preview-block slider-block">
-              <nz-carousel [nzAutoPlay]="true">
-                <div nz-carousel-content *ngFor="let image of layoutBlock.images">
-                  <img [src]="image.url" [alt]="image.title">
-                  <div class="caption" *ngIf="image.title || image.description">
-                    <h3 *ngIf="image.title">{{image.title}}</h3>
-                    <p *ngIf="image.description">{{image.description}}</p>
+      <div *ngIf="isLayoutSection(block)" class="preview-block layout-section">
+        <div class="layout-grid" [style.--columns]="block.columns" [style.--gap]="block.columnGap + 'px'">
+          <ng-container *ngFor="let columnIndex of [].constructor(block.columns); let i = index">
+            <div class="layout-column">
+              <ng-container *ngFor="let layoutBlock of getColumnBlocks(block, i)">
+                <!-- Heading Block -->
+                <div *ngIf="isHeadingBlock(layoutBlock)" class="preview-block heading-block">
+                  <ng-container [ngSwitch]="layoutBlock.level">
+                    <h1 *ngSwitchCase="'h1'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h1>
+                    <h2 *ngSwitchCase="'h2'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h2>
+                    <h3 *ngSwitchCase="'h3'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h3>
+                    <h4 *ngSwitchCase="'h4'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h4>
+                    <h5 *ngSwitchCase="'h5'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h5>
+                    <h6 *ngSwitchCase="'h6'" [style.color]="layoutBlock.color" [style.fontSize.px]="layoutBlock.fontSize" [style.textAlign]="layoutBlock.alignment">{{layoutBlock.content}}</h6>
+                  </ng-container>
+                </div>
+
+                <!-- Button Block -->
+                <div *ngIf="isButtonBlock(layoutBlock)" class="preview-block button-block" [style.textAlign]="layoutBlock.alignment">
+                  <a [href]="layoutBlock.url"
+                     [target]="layoutBlock.target"
+                     nz-button
+                     [nzType]="layoutBlock.style"
+                     [nzSize]="layoutBlock.size"
+                     [nzBlock]="layoutBlock.fullWidth">
+                    {{layoutBlock.text}}
+                  </a>
+                </div>
+
+                <!-- Slider Block -->
+                <div *ngIf="isSliderBlock(layoutBlock)" class="preview-block slider-block">
+                  <nz-carousel [nzAutoPlay]="true">
+                    <div nz-carousel-content *ngFor="let image of layoutBlock.images">
+                      <img [src]="image.url" [alt]="image.title">
+                      <div class="caption" *ngIf="image.title || image.description">
+                        <h3 *ngIf="image.title">{{image.title}}</h3>
+                        <p *ngIf="image.description">{{image.description}}</p>
+                      </div>
+                    </div>
+                  </nz-carousel>
+                </div>
+
+                <!-- Paragraph Block -->
+                <div *ngIf="isParagraphBlock(layoutBlock)" class="preview-block paragraph-block">
+                  <h2 *ngIf="layoutBlock.title">{{layoutBlock.title}}</h2>
+                  <div class="content" [innerHTML]="layoutBlock.content"></div>
+                </div>
+
+                <!-- List Block -->
+                <div *ngIf="isListBlock(layoutBlock)" class="preview-block list-block">
+                  <ul [class]="layoutBlock.style">
+                    <li *ngFor="let item of layoutBlock.items">
+                      <i *ngIf="layoutBlock.style === 'icon' && item.icon" nz-icon [nzType]="item.icon"></i>
+                      <div class="item-content">
+                        <h4>{{item.title}}</h4>
+                        <p *ngIf="item.description">{{item.description}}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Image List Block -->
+                <div *ngIf="isImageListBlock(layoutBlock)" class="preview-block image-list-block">
+                  <div class="image-grid" [class.carousel]="layoutBlock.layout === 'carousel'" [style.--columns]="layoutBlock.columns">
+                    <div *ngFor="let item of layoutBlock.items" class="image-item">
+                      <img [src]="item.image" [alt]="item.title">
+                      <div class="caption" *ngIf="item.title || item.description">
+                        <h4 *ngIf="item.title">{{item.title}}</h4>
+                        <p *ngIf="item.description">{{item.description}}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </nz-carousel>
-            </div>
 
-            <!-- Paragraph Block -->
-            <div *ngIf="isParagraphBlock(layoutBlock)" class="preview-block paragraph-block">
-              <h2 *ngIf="layoutBlock.title">{{layoutBlock.title}}</h2>
-              <div class="content" [innerHTML]="layoutBlock.content"></div>
-            </div>
-
-            <!-- List Block -->
-            <div *ngIf="isListBlock(layoutBlock)" class="preview-block list-block">
-              <ul [class]="layoutBlock.style">
-                <li *ngFor="let item of layoutBlock.items">
-                  <i *ngIf="layoutBlock.style === 'icon' && item.icon" nz-icon [nzType]="item.icon"></i>
-                  <div class="item-content">
-                    <h4>{{item.title}}</h4>
-                    <p *ngIf="item.description">{{item.description}}</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Image List Block -->
-            <div *ngIf="isImageListBlock(layoutBlock)" class="preview-block image-list-block">
-              <div class="image-grid" [class.carousel]="layoutBlock.layout === 'carousel'" [style.--columns]="layoutBlock.columns">
-                <div *ngFor="let item of layoutBlock.items" class="image-item">
-                  <img [src]="item.image" [alt]="item.title">
-                  <div class="caption" *ngIf="item.title || item.description">
-                    <h4 *ngIf="item.title">{{item.title}}</h4>
-                    <p *ngIf="item.description">{{item.description}}</p>
+                <!-- Video Block -->
+                <div *ngIf="isVideoBlock(layoutBlock)" class="preview-block video-block">
+                  <h3 *ngIf="layoutBlock.title">{{layoutBlock.title}}</h3>
+                  <p *ngIf="layoutBlock.description">{{layoutBlock.description}}</p>
+                  <div class="video-container">
+                    <video *ngIf="!layoutBlock.url.includes('youtube.com') && !layoutBlock.url.includes('vimeo.com')"
+                           [src]="layoutBlock.url"
+                           [poster]="layoutBlock.poster"
+                           [controls]="layoutBlock.controls"
+                           [autoplay]="layoutBlock.autoplay">
+                    </video>
+                    <iframe *ngIf="layoutBlock.url.includes('youtube.com')"
+                            [src]="layoutBlock.url | safe:'resourceUrl'"
+                            frameborder="0"
+                            allowfullscreen>
+                    </iframe>
+                    <iframe *ngIf="layoutBlock.url.includes('vimeo.com')"
+                            [src]="layoutBlock.url | safe:'resourceUrl'"
+                            frameborder="0"
+                            allowfullscreen>
+                    </iframe>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- Video Block -->
-            <div *ngIf="isVideoBlock(layoutBlock)" class="preview-block video-block">
-              <h3 *ngIf="layoutBlock.title">{{layoutBlock.title}}</h3>
-              <p *ngIf="layoutBlock.description">{{layoutBlock.description}}</p>
-              <div class="video-container">
-                <video *ngIf="!layoutBlock.url.includes('youtube.com') && !layoutBlock.url.includes('vimeo.com')"
-                       [src]="layoutBlock.url"
-                       [poster]="layoutBlock.poster"
-                       [controls]="layoutBlock.controls"
-                       [autoplay]="layoutBlock.autoplay">
-                </video>
-                <iframe *ngIf="layoutBlock.url.includes('youtube.com')"
-                        [src]="layoutBlock.url | safe:'resourceUrl'"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-                <iframe *ngIf="layoutBlock.url.includes('vimeo.com')"
-                        [src]="layoutBlock.url | safe:'resourceUrl'"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-              </div>
-            </div>
-
-            <!-- Gallery Block -->
-            <div *ngIf="isGalleryBlock(layoutBlock)" class="preview-block gallery-block">
-              <div class="gallery-grid"
-                   [class]="layoutBlock.layout + '-layout'"
-                   [style.--columns]="layoutBlock.columns"
-                   [style.--spacing]="layoutBlock.spacing + 'px'">
-                <div *ngFor="let image of layoutBlock.images" class="gallery-item">
-                  <img [src]="image.url" [alt]="image.title">
-                  <div class="caption" *ngIf="image.title || image.description">
-                    <h4 *ngIf="image.title">{{image.title}}</h4>
-                    <p *ngIf="image.description">{{image.description}}</p>
+                <!-- Gallery Block -->
+                <div *ngIf="isGalleryBlock(layoutBlock)" class="preview-block gallery-block">
+                  <div class="gallery-grid"
+                       [class]="layoutBlock.layout + '-layout'"
+                       [style.--columns]="layoutBlock.columns"
+                       [style.--spacing]="layoutBlock.spacing + 'px'">
+                    <div *ngFor="let image of layoutBlock.images" class="gallery-item">
+                      <img [src]="image.url" [alt]="image.title">
+                      <div class="caption" *ngIf="image.title || image.description">
+                        <h4 *ngIf="image.title">{{image.title}}</h4>
+                        <p *ngIf="image.description">{{image.description}}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
             </div>
           </ng-container>
         </div>

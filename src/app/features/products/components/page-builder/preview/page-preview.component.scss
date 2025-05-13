@@ -1,15 +1,42 @@
 .page-preview {
+  width: 100%;
+  overflow-x: hidden;
+
   .preview-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 24px;
+    width: 100%;
   }
 
   .preview-block {
     margin-bottom: 48px;
+    width: 100%;
 
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  // Layout Section
+  .layout-section {
+    .layout-grid {
+      display: grid;
+      grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+      gap: var(--gap);
+      width: 100%;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+
+      > * {
+        min-width: 0; // Prevent content from causing overflow
+        width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+      }
     }
   }
 
@@ -18,6 +45,9 @@
     h1, h2, h3, h4, h5, h6 {
       margin: 0;
       line-height: 1.2;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      hyphens: auto;
     }
   }
 
@@ -33,7 +63,43 @@
 
   // Slider Block
   .slider-block {
+    width: 100%;
+
     nz-carousel {
+      width: 100%;
+      height: 400px; // Chiều cao cố định cho slider
+
+      ::ng-deep {
+        .slick-list {
+          height: 100%;
+        }
+
+        .slick-track {
+          height: 100%;
+        }
+
+        .slick-slide {
+          height: 100%;
+
+          & > div {
+            height: 100%;
+          }
+        }
+
+        [nz-carousel-content] {
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+        }
+      }
+
       .caption {
         position: absolute;
         bottom: 0;
@@ -42,16 +108,26 @@
         padding: 20px;
         background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         color: white;
+        z-index: 1;
 
         h3 {
           margin: 0 0 8px;
           font-size: 24px;
+          color: white;
         }
 
         p {
           margin: 0;
           font-size: 16px;
+          color: rgba(255, 255, 255, 0.9);
         }
+      }
+    }
+
+    // Responsive height cho mobile
+    @media (max-width: 768px) {
+      nz-carousel {
+        height: 250px;
       }
     }
   }
@@ -209,13 +285,13 @@
       height: 0;
       overflow: hidden;
 
-      video,
-      iframe {
+      iframe, video {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
     }
   }
@@ -227,6 +303,10 @@
         display: grid;
         grid-template-columns: repeat(var(--columns), 1fr);
         gap: var(--spacing);
+
+        @media (max-width: 768px) {
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
       }
 
       &.masonry-layout {
@@ -273,20 +353,17 @@
     }
   }
 
-  .layout-section {
-    .layout-grid {
-      display: grid;
-      grid-template-columns: repeat(var(--columns), 1fr);
-      gap: var(--gap);
-    }
-  }
-
   .image-box-block {
     .image-box {
       &.layout-left,
       &.layout-right {
         display: flex;
         align-items: flex-start;
+        gap: var(--spacing, 24px);
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+        }
       }
 
       &.layout-right {
@@ -332,6 +409,7 @@
       .image-wrapper {
         position: relative;
         display: inline-block;
+        max-width: 100%;
 
         &.rounded {
           img {

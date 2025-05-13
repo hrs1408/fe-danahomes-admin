@@ -51,6 +51,35 @@ export class PagePreviewComponent {
   }
 
   getLayoutBlocks(section: LayoutSection): ContentBlock[] {
-    return section.blocks.map(item => item.block);
+    return section.blocks
+      .sort((a, b) => {
+        // Ưu tiên sắp xếp theo columnIndex
+        if (a.columnIndex !== b.columnIndex) {
+          return a.columnIndex - b.columnIndex;
+        }
+        // Sau đó sắp xếp theo order trong cùng một column
+        const orderA = a.block.order || 0;
+        const orderB = b.block.order || 0;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        // Nếu order bằng nhau, sắp xếp theo id để đảm bảo thứ tự ổn định
+        return (a.block.id || '').localeCompare(b.block.id || '');
+      })
+      .map(item => item.block);
+  }
+
+  getColumnBlocks(section: LayoutSection, columnIndex: number): ContentBlock[] {
+    return section.blocks
+      .filter(item => item.columnIndex === columnIndex)
+      .sort((a, b) => {
+        const orderA = a.block.order || 0;
+        const orderB = b.block.order || 0;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        return (a.block.id || '').localeCompare(b.block.id || '');
+      })
+      .map(item => item.block);
   }
 }

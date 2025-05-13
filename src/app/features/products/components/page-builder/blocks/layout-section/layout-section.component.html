@@ -1,6 +1,13 @@
-<div class="layout-section">
+<div class="layout-section" [class.collapsed]="isCollapsed">
   <div class="section-header">
-    <div class="section-settings">
+    <div class="section-left">
+      <button nz-button nzType="text" class="collapse-btn" (click)="toggleCollapse()">
+        <i nz-icon [nzType]="isCollapsed ? 'right' : 'down'"></i>
+      </button>
+      <span class="section-title">Section {{sectionIndex + 1}}</span>
+    </div>
+
+    <div class="section-settings" [class.hidden]="isCollapsed">
       <nz-form-item>
         <nz-form-label>Số cột</nz-form-label>
         <nz-form-control>
@@ -26,13 +33,15 @@
       </nz-form-item>
     </div>
 
-    <button nz-button nzType="text" nzDanger (click)="deleteSection.emit()">
-      <i nz-icon nzType="delete"></i>
-      Xóa section
-    </button>
+    <div class="section-actions">
+      <button nz-button nzType="text" nzDanger (click)="deleteSection.emit()">
+        <i nz-icon nzType="delete"></i>
+        Xóa section
+      </button>
+    </div>
   </div>
 
-  <div class="columns-container" [style.--columns]="section.columns" [style.--gap]="section.columnGap + 'px'">
+  <div class="columns-container" [class.hidden]="isCollapsed" [style.--columns]="section.columns" [style.--gap]="section.columnGap + 'px'">
     <div *ngFor="let i of [].constructor(section.columns); let columnIndex = index"
          class="column"
          cdkDropList

@@ -15,6 +15,8 @@ export class LayoutSectionComponent {
   @Output() sectionChange = new EventEmitter<LayoutSection>();
   @Output() deleteSection = new EventEmitter<void>();
 
+  isCollapsed = false;
+
   columnOptions = [
     { label: '1 cột', value: 1 },
     { label: '2 cột', value: 2 },
@@ -35,7 +37,16 @@ export class LayoutSectionComponent {
   getColumnBlocks(columnIndex: number): ContentBlock[] {
     return this.section.blocks
       .filter(item => item.columnIndex === columnIndex)
-      .sort((a, b) => (a.block.order || 0) - (b.block.order || 0))
+      .sort((a, b) => {
+        // Ưu tiên sắp xếp theo order
+        const orderA = a.block.order || 0;
+        const orderB = b.block.order || 0;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        // Nếu order bằng nhau, sắp xếp theo id để đảm bảo thứ tự ổn định
+        return (a.block.id || '').localeCompare(b.block.id || '');
+      })
       .map(item => item.block);
   }
 
@@ -68,12 +79,12 @@ export class LayoutSectionComponent {
 
     if (event.previousContainer === event.container) {
       // Reordering within the same column
-      const blocks = this.section.blocks.filter(item => item.columnIndex === targetColumnIndex);
+      const blocks = this.getColumnBlocks(targetColumnIndex);
       moveItemInArray(blocks, event.previousIndex, event.currentIndex);
 
-      // Update block orders
-      blocks.forEach((item, index) => {
-        const blockIndex = this.section.blocks.findIndex(b => b.block.id === item.block.id);
+      // Cập nhật lại order cho tất cả các block trong column
+      blocks.forEach((block, index) => {
+        const blockIndex = this.section.blocks.findIndex(b => b.block.id === block.id);
         if (blockIndex !== -1) {
           this.section.blocks[blockIndex] = {
             ...this.section.blocks[blockIndex],
@@ -100,27 +111,39 @@ export class LayoutSectionComponent {
         const sourceColumnMatch = event.previousContainer.id.match(/column-(\d+)-(\d+)/);
         if (sourceColumnMatch) {
           const sourceColumnIndex = parseInt(sourceColumnMatch[2]);
-          const blocks = this.section.blocks.filter(item => item.columnIndex === sourceColumnIndex);
+          const blocks = this.getColumnBlocks(sourceColumnIndex);
           const blockToMove = blocks[event.previousIndex];
 
           // Remove from source column
-          this.section.blocks = this.section.blocks.filter(item => item.block.id !== blockToMove.block.id);
+          this.section.blocks = this.section.blocks.filter(item => item.block.id !== blockToMove.id);
 
-          // Add to target column
-          newBlock = {...blockToMove.block};
+          // Add to target column with new order
+          newBlock = {...blockToMove};
         } else {
           console.warn('Unknown source container:', event.previousContainer.id);
           return;
         }
       }
 
-      // Add block to target column
+      // Add block to target column with correct order
       const existingBlocks = this.getColumnBlocks(targetColumnIndex);
+      const newOrder = event.currentIndex;
+
+      // Shift order of existing blocks if needed
+      this.section.blocks
+        .filter(item => item.columnIndex === targetColumnIndex)
+        .forEach(item => {
+          if (item.block.order && item.block.order >= newOrder) {
+            item.block.order += 1;
+          }
+        });
+
+      // Add new block with correct order
       this.section.blocks.push({
         columnIndex: targetColumnIndex,
         block: {
           ...newBlock,
-          order: existingBlocks.length
+          order: newOrder
         }
       });
     }
@@ -290,5 +313,9 @@ export class LayoutSectionComponent {
       gallery: 'Thư viện ảnh'
     };
     return labels[type] || type;
+  }
+
+  toggleCollapse(): void {
+    this.isCollapsed = !this.isCollapsed;
   }
 }

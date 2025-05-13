@@ -1,30 +1,85 @@
 .layout-section {
+  width: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: 4px;
   border: 1px solid #f0f0f0;
   margin-bottom: 24px;
+  transition: all 0.3s ease;
+
+  &.collapsed {
+    .section-header {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
 
   .section-header {
     margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 16px;
     background: #fafafa;
     border-bottom: 1px solid #f0f0f0;
+    flex-wrap: wrap;
+    gap: 16px;
+    transition: all 0.3s ease;
+
+    .section-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .collapse-btn {
+        padding: 0 8px;
+        height: 32px;
+
+        i {
+          transition: transform 0.3s ease;
+        }
+      }
+
+      .section-title {
+        font-size: 14px;
+        color: #595959;
+        font-weight: 500;
+      }
+    }
 
     .section-settings {
       display: flex;
       gap: 24px;
       align-items: flex-start;
+      flex-wrap: wrap;
+      transition: opacity 0.3s ease;
+
+      &.hidden {
+        display: none;
+      }
 
       nz-form-item {
         margin-bottom: 0;
+        min-width: 200px;
       }
 
       nz-radio-group {
         display: flex;
         gap: 8px;
+        flex-wrap: wrap;
+      }
+    }
+
+    .section-actions {
+      margin-left: auto;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+
+      .section-actions {
+        margin-left: 0;
       }
     }
   }
@@ -34,6 +89,17 @@
     grid-template-columns: repeat(var(--columns), 1fr);
     gap: var(--gap);
     padding: 16px;
+    width: 100%;
+    min-height: 100px;
+    transition: all 0.3s ease;
+
+    &.hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
 
     &[style*="--columns:1"] {
       max-width: 800px;
@@ -58,6 +124,7 @@
     border: 1px solid #d9d9d9;
     border-radius: 4px;
     margin-bottom: 8px;
+    width: 100%;
 
     &:last-child {
       margin-bottom: 0;
@@ -94,15 +161,17 @@
     .block-preview {
       padding: 16px;
       border-bottom: 1px solid #f0f0f0;
+      overflow: hidden;
 
-      h1, h2, h3, h4, h5, h6 {
-        margin: 0;
-        line-height: 1.2;
+      img {
+        max-width: 100%;
+        height: auto;
       }
     }
 
     .block-content {
       padding: 16px;
+      width: 100%;
     }
   }
 
