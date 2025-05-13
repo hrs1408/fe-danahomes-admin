@@ -1,0 +1,93 @@
+<div class="button-block">
+  <div class="button-preview" [class.full-width]="block.fullWidth" [style.text-align]="block.alignment">
+    <button nz-button
+            [nzType]="block.style"
+            [nzSize]="block.size"
+            [nzBlock]="block.fullWidth">
+      {{ block.text }}
+    </button>
+  </div>
+
+  <div class="block-settings">
+    <nz-form-item>
+      <nz-form-label>Nội dung</nz-form-label>
+      <nz-form-control>
+        <input nz-input
+               [(ngModel)]="block.text"
+               (ngModelChange)="onTextChange($event)"
+               placeholder="Nhập nội dung nút">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Đường dẫn</nz-form-label>
+      <nz-form-control>
+        <input nz-input
+               [(ngModel)]="block.url"
+               (ngModelChange)="onUrlChange($event)"
+               placeholder="Nhập đường dẫn">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Mở trong</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.target"
+                        (ngModelChange)="onTargetChange($event)">
+          <label nz-radio value="_self">Cửa sổ hiện tại</label>
+          <label nz-radio value="_blank">Cửa sổ mới</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Kiểu nút</nz-form-label>
+      <nz-form-control>
+        <nz-select [(ngModel)]="block.style"
+                   (ngModelChange)="onStyleChange($event)">
+          <nz-option *ngFor="let option of styleOptions"
+                    [nzValue]="option.value"
+                    [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Kích thước</nz-form-label>
+      <nz-form-control>
+        <nz-select [(ngModel)]="block.size"
+                   (ngModelChange)="onSizeChange($event)">
+          <nz-option *ngFor="let option of sizeOptions"
+                    [nzValue]="option.value"
+                    [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Căn chỉnh</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.alignment"
+                        (ngModelChange)="onAlignmentChange($event)">
+          <label *ngFor="let option of alignmentOptions"
+                 nz-radio
+                 [nzValue]="option.value">
+            <i nz-icon [nzType]="option.icon"></i>
+          </label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <label nz-checkbox
+               [(ngModel)]="block.fullWidth"
+               (ngModelChange)="onFullWidthChange($event)">
+          Chiều rộng 100%
+        </label>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>

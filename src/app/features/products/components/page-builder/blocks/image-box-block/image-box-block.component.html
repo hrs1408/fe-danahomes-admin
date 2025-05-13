@@ -1,0 +1,117 @@
+<div class="image-box-block">
+  <form nz-form>
+    <!-- Image Settings -->
+    <nz-form-item>
+      <nz-form-label>URL ảnh</nz-form-label>
+      <nz-form-control>
+        <input nz-input [ngModel]="block.image.url" (ngModelChange)="onImageUrlChange($event)" name="imageUrl" placeholder="Nhập URL ảnh">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Alt text</nz-form-label>
+      <nz-form-control>
+        <input nz-input [ngModel]="block.image.alt" (ngModelChange)="onImageAltChange($event)" name="imageAlt" placeholder="Nhập alt text">
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="size-inputs">
+      <nz-form-item>
+        <nz-form-label>Kích thước ảnh</nz-form-label>
+        <nz-form-control>
+          <nz-input-number [ngModel]="block.image.width" (ngModelChange)="onImageWidthChange($event)" [nzPlaceHolder]="'Rộng'" [nzMin]="0"></nz-input-number>
+          <span class="separator">x</span>
+          <nz-input-number [ngModel]="block.image.height" (ngModelChange)="onImageHeightChange($event)" [nzPlaceHolder]="'Cao'" [nzMin]="0"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- Content Settings -->
+    <nz-form-item>
+      <nz-form-label>Tiêu đề</nz-form-label>
+      <nz-form-control>
+        <input nz-input [ngModel]="block.title" (ngModelChange)="onTitleChange($event)" name="title" placeholder="Nhập tiêu đề">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Mô tả</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input [ngModel]="block.description" (ngModelChange)="onDescriptionChange($event)" name="description" placeholder="Nhập mô tả" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Layout Settings -->
+    <nz-form-item>
+      <nz-form-label>Bố cục</nz-form-label>
+      <nz-form-control>
+        <nz-select [ngModel]="block.layout" (ngModelChange)="onLayoutChange($event)" name="layout">
+          <nz-option *ngFor="let option of layoutOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Thẻ tiêu đề</nz-form-label>
+      <nz-form-control>
+        <nz-select [ngModel]="block.titleTag" (ngModelChange)="onTitleTagChange($event)" name="titleTag">
+          <nz-option *ngFor="let option of titleTagOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Style Settings -->
+    <nz-form-item>
+      <nz-form-label>Hiệu ứng ảnh</nz-form-label>
+      <nz-form-control class="effects">
+        <label nz-checkbox [ngModel]="block.imageRounded" (ngModelChange)="onImageRoundedChange($event)" name="imageRounded">Bo tròn</label>
+        <label nz-checkbox [ngModel]="block.imageShadow" (ngModelChange)="onImageShadowChange($event)" name="imageShadow">Đổ bóng</label>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Màu nền</nz-form-label>
+      <nz-form-control>
+        <nz-color-picker [ngModel]="block.backgroundColor" (ngModelChange)="onBackgroundColorChange($event)" name="backgroundColor"></nz-color-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Màu chữ</nz-form-label>
+      <nz-form-control>
+        <nz-color-picker [ngModel]="block.textColor" (ngModelChange)="onTextColorChange($event)" name="textColor"></nz-color-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Padding (px)</nz-form-label>
+      <nz-form-control>
+        <nz-input-number [ngModel]="block.padding" (ngModelChange)="onPaddingChange($event)" [nzMin]="0" [nzMax]="48" [nzStep]="8"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Khoảng cách (px)</nz-form-label>
+      <nz-form-control>
+        <nz-input-number [ngModel]="block.spacing" (ngModelChange)="onSpacingChange($event)" [nzMin]="0" [nzMax]="48" [nzStep]="8"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <!-- Preview -->
+  <div class="preview" [class]="'layout-' + block.layout" [style.backgroundColor]="block.backgroundColor" [style.color]="block.textColor" [style.padding.px]="block.padding">
+    <div class="image-wrapper" [class.rounded]="block.imageRounded" [class.shadow]="block.imageShadow">
+      <img [src]="block.image.url" [alt]="block.image.alt" [style.width.px]="block.image.width" [style.height.px]="block.image.height">
+    </div>
+    <div class="content" [style.marginLeft.px]="block.layout === 'right' ? block.spacing : null" [style.marginRight.px]="block.layout === 'left' ? block.spacing : null" [style.marginTop.px]="block.layout === 'bottom' ? block.spacing : null" [style.marginBottom.px]="block.layout === 'top' ? block.spacing : null">
+      <ng-container [ngSwitch]="block.titleTag">
+        <h2 *ngSwitchCase="'h2'">{{block.title}}</h2>
+        <h3 *ngSwitchCase="'h3'">{{block.title}}</h3>
+        <h4 *ngSwitchCase="'h4'">{{block.title}}</h4>
+        <h5 *ngSwitchCase="'h5'">{{block.title}}</h5>
+        <h6 *ngSwitchCase="'h6'">{{block.title}}</h6>
+      </ng-container>
+      <p>{{block.description}}</p>
+    </div>
+  </div>
+</div>

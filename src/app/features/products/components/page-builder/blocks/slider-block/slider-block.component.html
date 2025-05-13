@@ -1,0 +1,50 @@
+<div class="slider-block">
+  <div class="images-list">
+    <div *ngFor="let image of block.images; let i = index" class="image-item">
+      <nz-card>
+        <div class="image-preview">
+          <img *ngIf="image.url" [src]="image.url" [alt]="image.title">
+          <div *ngIf="!image.url" class="no-image">
+            <i nz-icon nzType="picture" nzTheme="outline"></i>
+            <span>Chưa có hình ảnh</span>
+          </div>
+        </div>
+
+        <form nz-form>
+          <nz-form-item>
+            <nz-form-label>URL Hình ảnh</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="image.url" name="url" (ngModelChange)="emitChange()" placeholder="Nhập URL hình ảnh">
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Tiêu đề</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="image.title" name="title" (ngModelChange)="emitChange()" placeholder="Nhập tiêu đề">
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Mô tả</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input [(ngModel)]="image.description" name="description" (ngModelChange)="emitChange()" placeholder="Nhập mô tả"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+
+        <div class="image-actions">
+          <button nz-button nzType="text" nzDanger (click)="removeImage(i)">
+            <i nz-icon nzType="delete"></i>
+            Xóa
+          </button>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <button nz-button nzType="dashed" class="add-image-btn" (click)="addImage()">
+    <i nz-icon nzType="plus"></i>
+    Thêm hình ảnh
+  </button>
+</div>

@@ -1,0 +1,29 @@
+.list-block {
+  nz-radio-group {
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .list-items {
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .list-item {
+    nz-card {
+      margin-bottom: 0;
+    }
+  }
+
+  .item-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .add-item-btn {
+    width: 100%;
+  }
+}

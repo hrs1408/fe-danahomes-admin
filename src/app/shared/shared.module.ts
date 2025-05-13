@@ -43,6 +43,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { SafePipe } from './pipes/safe.pipe';
+
 const ANT_DESIGN_MODULES = [
   NzLayoutModule,
   NzDropDownModule,
@@ -95,7 +97,9 @@ const ANT_DESIGN_MODULES = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    SafePipe
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -106,7 +110,8 @@ const ANT_DESIGN_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ...ANT_DESIGN_MODULES
+    ...ANT_DESIGN_MODULES,
+    SafePipe
   ]
 })
 export class SharedModule { }

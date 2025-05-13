@@ -319,8 +319,16 @@
             </div>
           </div>
 
-          <!-- Mô tả chi tiết -->
-          <nz-form-item>
+          <!-- Mô tả chi tiết - chỉ hiển thị cho dự án -->
+          <nz-form-item *ngIf="productForm.get('category_id')?.value === 7">
+            <nz-form-label [nzSpan]="24">Nội dung</nz-form-label>
+            <nz-form-control [nzSpan]="24">
+              <app-page-builder
+                [formControl]="contentControl"
+              ></app-page-builder>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="productForm.get('category_id')?.value !== 7">
             <nz-form-label nzRequired>Mô tả chi tiết</nz-form-label>
             <nz-form-control nzErrorTip="Vui lòng nhập mô tả chi tiết">
               <editor formControlName="content" [init]="editorConfig"></editor>

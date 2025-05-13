@@ -1,0 +1,84 @@
+<div class="gallery-block">
+  <div class="block-settings">
+    <nz-form-item>
+      <nz-form-label>Kiểu hiển thị</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.layout" (ngModelChange)="onLayoutChange($event)">
+          <label *ngFor="let layout of layouts" nz-radio [nzValue]="layout.value">{{ layout.label }}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Số cột</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.columns" (ngModelChange)="onColumnsChange($event)">
+          <label *ngFor="let col of columns" nz-radio [nzValue]="col.value">{{ col.label }}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Khoảng cách (px)</nz-form-label>
+      <nz-form-control>
+        <nz-input-number [(ngModel)]="block.spacing" (ngModelChange)="onSpacingChange($event)" [nzMin]="0" [nzMax]="48" [nzStep]="4"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="gallery-items" [class]="block.layout + '-layout'" [style.--columns]="block.columns" [style.--spacing]="block.spacing + 'px'">
+    <div *ngFor="let image of block.images; let i = index" class="gallery-item">
+      <nz-card>
+        <div class="image-preview">
+          <img *ngIf="image.url" [src]="image.url" [alt]="image.title">
+          <div *ngIf="!image.url" class="no-image">
+            <i nz-icon nzType="picture" nzTheme="outline"></i>
+            <span>Chưa có hình ảnh</span>
+          </div>
+        </div>
+
+        <form nz-form>
+          <nz-form-item>
+            <nz-form-label>URL Hình ảnh</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="image.url" name="url" (ngModelChange)="onImageChange(i, 'url', $event)" placeholder="Nhập URL hình ảnh">
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>URL Thumbnail</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="image.thumbnail" name="thumbnail" (ngModelChange)="onImageChange(i, 'thumbnail', $event)" placeholder="Nhập URL thumbnail">
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Tiêu đề</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="image.title" name="title" (ngModelChange)="onImageChange(i, 'title', $event)" placeholder="Nhập tiêu đề">
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Mô tả</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input [(ngModel)]="image.description" name="description" (ngModelChange)="onImageChange(i, 'description', $event)" placeholder="Nhập mô tả" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+
+        <div class="image-actions">
+          <button nz-button nzType="text" nzDanger (click)="removeImage(i)">
+            <i nz-icon nzType="delete"></i>
+            Xóa
+          </button>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <button nz-button nzType="dashed" class="add-image-btn" (click)="addImage()">
+    <i nz-icon nzType="plus"></i>
+    Thêm hình ảnh
+  </button>
+</div>

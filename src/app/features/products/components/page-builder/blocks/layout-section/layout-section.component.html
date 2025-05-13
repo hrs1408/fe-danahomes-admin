@@ -1,0 +1,182 @@
+<div class="layout-section">
+  <div class="section-header">
+    <div class="section-settings">
+      <nz-form-item>
+        <nz-form-label>Số cột</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group [(ngModel)]="section.columns" (ngModelChange)="onColumnsChange($event)" name="columns">
+            <label *ngFor="let option of columnOptions" nz-radio [nzValue]="option.value">
+              {{ option.label }}
+            </label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>Khoảng cách (px)</nz-form-label>
+        <nz-form-control>
+          <nz-input-number
+            [(ngModel)]="section.columnGap"
+            (ngModelChange)="onColumnGapChange($event)"
+            [nzMin]="0"
+            [nzMax]="48"
+            [nzStep]="8"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <button nz-button nzType="text" nzDanger (click)="deleteSection.emit()">
+      <i nz-icon nzType="delete"></i>
+      Xóa section
+    </button>
+  </div>
+
+  <div class="columns-container" [style.--columns]="section.columns" [style.--gap]="section.columnGap + 'px'">
+    <div *ngFor="let i of [].constructor(section.columns); let columnIndex = index"
+         class="column"
+         cdkDropList
+         [cdkDropListData]="getColumnBlocks(columnIndex)"
+         [id]="'column-' + sectionIndex + '-' + columnIndex"
+         (cdkDropListDropped)="onDrop($event, columnIndex)"
+         [cdkDropListConnectedTo]="connectedLists">
+
+      <div *ngFor="let block of getColumnBlocks(columnIndex); let blockIndex = index"
+           class="block"
+           cdkDrag
+           [cdkDragData]="block">
+        <div class="block-header" cdkDragHandle>
+          <div class="block-title">
+            <i nz-icon [nzType]="getBlockIcon(block.type)"></i>
+            {{ getBlockLabel(block.type) }}
+          </div>
+          <div class="block-actions">
+            <button nz-button nzType="text" nzDanger (click)="removeBlock(columnIndex, blockIndex)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="block-preview">
+          <!-- Heading Block -->
+          <div *ngIf="isHeadingBlock(block)" [ngSwitch]="block.level" [style.textAlign]="block.alignment">
+            <h1 *ngSwitchCase="'h1'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h1>
+            <h2 *ngSwitchCase="'h2'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h2>
+            <h3 *ngSwitchCase="'h3'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h3>
+            <h4 *ngSwitchCase="'h4'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h4>
+            <h5 *ngSwitchCase="'h5'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h5>
+            <h6 *ngSwitchCase="'h6'" [style.color]="block.color" [style.fontSize.px]="block.fontSize">{{block.content || 'Nhập nội dung tiêu đề...'}}</h6>
+          </div>
+
+          <!-- Button Block -->
+          <div *ngIf="isButtonBlock(block)" [style.textAlign]="block.alignment">
+            <button nz-button
+                    [nzType]="block.style"
+                    [nzSize]="block.size"
+                    [nzBlock]="block.fullWidth">
+              {{block.text}}
+            </button>
+          </div>
+
+          <!-- Gallery Block -->
+          <div *ngIf="isGalleryBlock(block)" class="preview-block gallery-block">
+            <div class="gallery-grid"
+                 [class]="block.layout + '-layout'"
+                 [style.--columns]="block.columns"
+                 [style.--spacing]="block.spacing + 'px'">
+              <div *ngFor="let image of block.images" class="gallery-item">
+                <img [src]="image.url" [alt]="image.title">
+                <div class="caption" *ngIf="image.title || image.description">
+                  <h4 *ngIf="image.title">{{image.title}}</h4>
+                  <p *ngIf="image.description">{{image.description}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Box Block -->
+          <div *ngIf="isImageBoxBlock(block)" class="preview-block image-box-block">
+            <div class="image-box" [class]="'layout-' + block.layout" [style.backgroundColor]="block.backgroundColor" [style.color]="block.textColor" [style.padding.px]="block.padding">
+              <div class="image-wrapper" [class.rounded]="block.imageRounded" [class.shadow]="block.imageShadow">
+                <img [src]="block.image.url" [alt]="block.image.alt" [style.width.px]="block.image.width" [style.height.px]="block.image.height">
+              </div>
+              <div class="content" [style.marginLeft.px]="block.layout === 'right' ? block.spacing : null" [style.marginRight.px]="block.layout === 'left' ? block.spacing : null" [style.marginTop.px]="block.layout === 'bottom' ? block.spacing : null" [style.marginBottom.px]="block.layout === 'top' ? block.spacing : null">
+                <ng-container [ngSwitch]="block.titleTag">
+                  <h2 *ngSwitchCase="'h2'">{{block.title}}</h2>
+                  <h3 *ngSwitchCase="'h3'">{{block.title}}</h3>
+                  <h4 *ngSwitchCase="'h4'">{{block.title}}</h4>
+                  <h5 *ngSwitchCase="'h5'">{{block.title}}</h5>
+                  <h6 *ngSwitchCase="'h6'">{{block.title}}</h6>
+                </ng-container>
+                <p>{{block.description}}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Other blocks... -->
+        </div>
+
+        <div class="block-content">
+          <app-heading-block
+            *ngIf="isHeadingBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-heading-block>
+
+          <app-button-block
+            *ngIf="isButtonBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-button-block>
+
+          <app-slider-block
+            *ngIf="isSliderBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-slider-block>
+
+          <app-paragraph-block
+            *ngIf="isParagraphBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-paragraph-block>
+
+          <app-list-block
+            *ngIf="isListBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-list-block>
+
+          <app-image-list-block
+            *ngIf="isImageListBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-image-list-block>
+
+          <app-video-block
+            *ngIf="isVideoBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-video-block>
+
+          <app-gallery-block
+            *ngIf="isGalleryBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-gallery-block>
+
+          <app-image-box-block
+            *ngIf="isImageBoxBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(columnIndex, blockIndex, $event)"
+          ></app-image-box-block>
+        </div>
+      </div>
+
+      <div class="column-placeholder" *ngIf="getColumnBlocks(columnIndex).length === 0">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+        <span>Kéo block vào đây</span>
+      </div>
+    </div>
+  </div>
+</div>
