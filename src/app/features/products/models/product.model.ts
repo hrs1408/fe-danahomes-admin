@@ -1,3 +1,5 @@
+import { PageContent } from './page-builder.model';
+
 export interface AddressDetail {
   id?: number;
   address: string;
@@ -14,8 +16,7 @@ export interface ProductDetail {
   area: number;
   price: number;
   price_to: number;
-  content: string;
-  type_product: string;
+  content: string | PageContent;
   investor: string;
   project_type: string;
   project_status: string;
@@ -25,6 +26,7 @@ export interface ProductDetail {
   internet_price: number;
   utilities: string;
   interiol: string;
+  type_product: string;
 }
 
 export interface Tag {

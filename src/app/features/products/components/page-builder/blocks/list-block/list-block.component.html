@@ -1,0 +1,53 @@
+<div class="list-block">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label>Kiểu danh sách</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.style" (ngModelChange)="onStyleChange($event)" name="style">
+          <label *ngFor="let style of listStyles" nz-radio [nzValue]="style.value">{{ style.label }}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="list-items">
+      <div *ngFor="let item of block.items; let i = index" class="list-item">
+        <nz-card>
+          <form nz-form>
+            <nz-form-item>
+              <nz-form-label>Tiêu đề</nz-form-label>
+              <nz-form-control>
+                <input nz-input [(ngModel)]="item.title" name="title" placeholder="Nhập tiêu đề">
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <nz-form-label>Mô tả</nz-form-label>
+              <nz-form-control>
+                <textarea nz-input [(ngModel)]="item.description" name="description" placeholder="Nhập mô tả" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="block.style === 'icon'">
+              <nz-form-label>Icon</nz-form-label>
+              <nz-form-control>
+                <input nz-input [(ngModel)]="item.icon" name="icon" placeholder="Nhập tên icon">
+              </nz-form-control>
+            </nz-form-item>
+
+            <div class="item-actions">
+              <button nz-button nzType="text" nzDanger (click)="removeItem(i)">
+                <i nz-icon nzType="delete"></i>
+                Xóa
+              </button>
+            </div>
+          </form>
+        </nz-card>
+      </div>
+    </div>
+
+    <button nz-button nzType="dashed" class="add-item-btn" (click)="addItem()">
+      <i nz-icon nzType="plus"></i>
+      Thêm mục
+    </button>
+  </form>
+</div>

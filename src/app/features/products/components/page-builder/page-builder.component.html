@@ -1,0 +1,130 @@
+<div class="page-builder">
+  <div class="toolbar">
+    <div class="left-actions">
+      <button nz-button nzType="default" (click)="addLayoutSection()">
+        <i nz-icon nzType="layout" nzTheme="outline"></i>
+        Thêm Layout
+      </button>
+      <nz-divider nzType="vertical"></nz-divider>
+      <div class="block-templates"
+           cdkDropList
+           id="block-templates"
+           [cdkDropListData]="blockTemplates"
+           [cdkDropListConnectedTo]="getLayoutColumnIds()">
+        <div class="block-template"
+             *ngFor="let template of blockTemplates"
+             cdkDrag
+             [cdkDragData]="template">
+          <button nz-button nzType="default">
+            <i nz-icon [nzType]="getBlockIcon(template.type)" nzTheme="outline"></i>
+            {{ getBlockLabel(template.type) }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="right-actions">
+      <button nz-button nzType="primary" (click)="togglePreview()">
+        <i nz-icon [nzType]="isPreview ? 'edit' : 'eye'" nzTheme="outline"></i>
+        {{ isPreview ? 'Chỉnh sửa' : 'Xem trước' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Editor Mode -->
+  <div class="blocks-container"
+       *ngIf="!isPreview"
+       cdkDropList
+       id="main-container"
+       [cdkDropListData]="content.blocks"
+       [cdkDropListConnectedTo]="getLayoutColumnIds()"
+       (cdkDropListDropped)="drop($event)">
+    <ng-container *ngFor="let block of content.blocks; let i = index">
+      <!-- Layout Section -->
+      <app-layout-section
+        *ngIf="isLayoutSection(block)"
+        [section]="block"
+        [sectionIndex]="i"
+        (sectionChange)="updateBlock(i, $event)"
+        (deleteSection)="removeBlock(i)"
+        cdkDrag
+      ></app-layout-section>
+
+      <!-- Regular Block -->
+      <div *ngIf="!isLayoutSection(block)" class="block" cdkDrag [cdkDragData]="block">
+        <div class="block-header" cdkDragHandle>
+          <div class="block-title">{{ getBlockLabel(block.type) }}</div>
+          <div class="block-actions">
+            <button nz-button nzType="text" (click)="moveBlock(i, 'up')" [disabled]="i === 0">
+              <i nz-icon nzType="arrow-up"></i>
+            </button>
+            <button nz-button nzType="text" (click)="moveBlock(i, 'down')" [disabled]="i === content.blocks.length - 1">
+              <i nz-icon nzType="arrow-down"></i>
+            </button>
+            <button nz-button nzType="text" nzDanger (click)="removeBlock(i)">
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="block-content">
+          <app-heading-block
+            *ngIf="isHeadingBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-heading-block>
+
+          <app-button-block
+            *ngIf="isButtonBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-button-block>
+
+          <app-slider-block
+            *ngIf="isSliderBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-slider-block>
+
+          <app-paragraph-block
+            *ngIf="isParagraphBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-paragraph-block>
+
+          <app-list-block
+            *ngIf="isListBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-list-block>
+
+          <app-image-list-block
+            *ngIf="isImageListBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-image-list-block>
+
+          <app-video-block
+            *ngIf="isVideoBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-video-block>
+
+          <app-gallery-block
+            *ngIf="isGalleryBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-gallery-block>
+
+          <app-image-box-block
+            *ngIf="isImageBoxBlock(block)"
+            [block]="block"
+            (blockChange)="updateBlock(i, $event)"
+          ></app-image-box-block>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Preview Mode -->
+  <app-page-preview *ngIf="isPreview" [content]="content"></app-page-preview>
+</div>

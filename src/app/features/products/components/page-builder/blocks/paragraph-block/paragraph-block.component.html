@@ -1,0 +1,22 @@
+<div class="paragraph-block">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label>Tiêu đề</nz-form-label>
+      <nz-form-control>
+        <input nz-input [ngModel]="block.title" (ngModelChange)="onTitleChange($event)" name="title" placeholder="Nhập tiêu đề">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Nội dung</nz-form-label>
+      <nz-form-control>
+        <editor
+          [ngModel]="block.content"
+          (ngModelChange)="onContentChange($event)"
+          name="content"
+          [init]="editorConfig"
+        ></editor>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

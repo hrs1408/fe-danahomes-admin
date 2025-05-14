@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadFile, NzUploadXHRArgs, NzUploadChangeParam } from 'ng-zorro-antd/upload';
@@ -94,7 +94,7 @@ export class ProductFormComponent implements OnInit {
 
   // Product type options
   typeProducts = [
-    { label: 'Bán', value: 'sell' },
+    { label: 'Bán', value: 'sale' },
     { label: 'Cho thuê', value: 'rent' },
   ];
 
@@ -377,17 +377,16 @@ export class ProductFormComponent implements OnInit {
 
   initForm(): void {
     this.productForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
-      slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
-      category_id: [null, [Validators.required]],
+      name: ['', [Validators.required]],
+      slug: ['', [Validators.required]],
+      category_id: [null, [Validators.required, this.categoryValidator.bind(this)]],
       product_parent_id: [null],
-      type_product: ['', [Validators.required]],
       address_detail: this.fb.group({
-        address: ['', [Validators.required, Validators.minLength(10)]],
+        address: ['', [Validators.required]],
         province: ['', [Validators.required]],
         district: ['', [Validators.required]],
         ward: ['', [Validators.required]],
-        google_address_link: ['', [Validators.required, Validators.pattern(/^https?:\/\/.*/)]],
+        google_address_link: ['']
       }),
       product_detail: this.fb.group({
         bedroom: [0],
@@ -395,20 +394,19 @@ export class ProductFormComponent implements OnInit {
         area: [0, [Validators.required, Validators.min(0)]],
         price: [0, [Validators.required, Validators.min(0)]],
         price_to: [0, [Validators.min(0)]],
-        content: ['', [Validators.required, Validators.minLength(100)]],
+        content: [{ blocks: [] }, [Validators.required]],
         investor: [''],
         project_type: [''],
         project_status: [''],
         type_of_investment: [''],
+        type_product: ['', [Validators.required]],
         eletric_price: [0],
         water_price: [0],
         internet_price: [0],
         utilities: [''],
         interiol: ['']
       }, { validators: this.priceRangeValidator }),
-      tag_ids: [[]],
-      cover_image: [null, [Validators.required]],
-      product_images: [[], [Validators.required, Validators.minLength(1)]]
+      tag_ids: [[]]
     });
 
     // Thêm validator cho category_id khi có product_parent_id
@@ -444,15 +442,15 @@ export class ProductFormComponent implements OnInit {
     });
 
     // Thêm validator cho các trường của cho thuê khi type_product === 'rent'
-    this.productForm.get('type_product')?.valueChanges.subscribe(value => {
+    this.productForm.get('product_detail.type_product')?.valueChanges.subscribe(value => {
       const eletricPriceControl = this.productForm.get('product_detail.eletric_price');
       const waterPriceControl = this.productForm.get('product_detail.water_price');
       const internetPriceControl = this.productForm.get('product_detail.internet_price');
 
       if (value === 'rent') {
-        eletricPriceControl?.clearValidators();
-        waterPriceControl?.clearValidators();
-        internetPriceControl?.clearValidators();
+        eletricPriceControl?.setValidators([Validators.required, Validators.min(0)]);
+        waterPriceControl?.setValidators([Validators.required, Validators.min(0)]);
+        internetPriceControl?.setValidators([Validators.required, Validators.min(0)]);
       } else {
         eletricPriceControl?.clearValidators();
         waterPriceControl?.clearValidators();
@@ -469,20 +467,67 @@ export class ProductFormComponent implements OnInit {
 
   loadProduct(id: number): void {
     this.loading = true;
-    this.productService.getProductById(id).subscribe({
+    this.productService.getProduct(id).subscribe({
       next: (response) => {
         const product = response.data;
+        console.log('Raw product data:', product);
+        console.log('Product detail content type:', typeof product?.product_detail?.content);
+        console.log('Product detail content:', product?.product_detail?.content);
 
-        // Cập nhật form với dữ liệu sản phẩm
-        this.productForm.patchValue({
-          name: product.name,
-          slug: product.slug,
-          category_id: product.category_id,
-          product_parent_id: product.product_parent_id,
-          address_detail: product.address_detail,
-          product_detail: product.product_detail,
-          tag_ids: product.tag?.map(tag => tag.id) || []
-        });
+        // Xử lý content dựa vào category_id
+        let content: any;
+        try {
+          if (product?.product_detail?.content) {
+            // Parse content string thành object nếu là category 7
+            if (product.category_id === 7) {
+              try {
+                // Nếu content là string thì parse, nếu không thì giữ nguyên
+                content = typeof product.product_detail.content === 'string'
+                  ? JSON.parse(product.product_detail.content)
+                  : product.product_detail.content;
+              } catch (parseError) {
+                console.error('Error parsing content:', parseError);
+                content = { blocks: [] };
+              }
+            } else {
+              // Với category khác, giữ nguyên giá trị
+              content = product.product_detail.content;
+            }
+          } else {
+            // Giá trị mặc định
+            content = product?.category_id === 7 ? { blocks: [] } : '';
+          }
+        } catch (error) {
+          console.error('Error processing content:', error);
+          content = product?.category_id === 7 ? { blocks: [] } : '';
+        }
+
+        console.log('Final processed content:', content);
+
+        // Cập nhật form với dữ liệu an toàn
+        const formData = {
+          name: product?.name || '',
+          slug: product?.slug || '',
+          category_id: product?.category_id || null,
+          product_parent_id: product?.product_parent_id || null,
+          address_detail: product?.address_detail || {},
+          product_detail: {
+            ...(product?.product_detail || {}),
+            content: content,
+            bedroom: product?.product_detail?.bedroom || 0,
+            bathroom: product?.product_detail?.bathroom || 0,
+            area: product?.product_detail?.area || 0,
+            price: product?.product_detail?.price || 0,
+            price_to: product?.product_detail?.price_to || 0,
+            eletric_price: product?.product_detail?.eletric_price || 0,
+            water_price: product?.product_detail?.water_price || 0,
+            internet_price: product?.product_detail?.internet_price || 0
+          },
+          tag_ids: product?.tag?.map(t => t.id) || []
+        };
+
+        console.log('Form data to patch:', formData);
+        this.productForm.patchValue(formData);
 
         // Cập nhật vị trí trên bản đồ từ google_address_link
         const addressLink = product.address_detail.google_address_link;
@@ -536,6 +581,9 @@ export class ProductFormComponent implements OnInit {
       },
       error: (error) => {
         this.message.error('Có lỗi xảy ra khi tải thông tin sản phẩm');
+        this.loading = false;
+      },
+      complete: () => {
         this.loading = false;
       }
     });
@@ -606,54 +654,76 @@ export class ProductFormComponent implements OnInit {
   };
 
   async onSubmit(): Promise<void> {
-    console.log(this.productForm); //please do not remove this line
+    console.log(this.productForm, 'check');
+
+    // Thêm hàm kiểm tra lỗi
+    const findInvalidControls = () => {
+      const invalid = [];
+      const controls = this.productForm.controls;
+
+      for (const name in controls) {
+        const control = controls[name];
+
+        if (control.invalid) {
+          console.log(`Control ${name} is invalid:`, {
+            errors: control.errors,
+            value: control.value
+          });
+
+          // Kiểm tra các control con nếu là FormGroup
+          if (control instanceof FormGroup) {
+            for (const childName in control.controls) {
+              const childControl = control.controls[childName];
+              if (childControl.invalid) {
+                console.log(`Child control ${name}.${childName} is invalid:`, {
+                  errors: childControl.errors,
+                  value: childControl.value
+                });
+                invalid.push(`${name}.${childName}`);
+              }
+            }
+          } else {
+            invalid.push(name);
+          }
+        }
+      }
+      return invalid;
+    };
+
+    if (this.productForm.invalid) {
+      console.log('Invalid controls:', findInvalidControls());
+      this.message.warning('Vui lòng điền đầy đủ thông tin bắt buộc');
+      return;
+    }
+
     if (this.productForm.valid) {
       this.loading = true;
       try {
         const formValue = this.productForm.value;
+        const content = formValue.product_detail.content;
 
-        // Format dữ liệu theo đúng cấu trúc API yêu cầu
-        const requestData = {
+        // Chuyển đổi content thành JSON string nếu là object
+        const request: ProductRequest = {
           name: formValue.name,
           slug: formValue.slug,
-          category_id: formValue.category_id || 0,
-          product_parent_id: formValue.product_parent_id || null,
-          address_detail: {
-            address: formValue.address_detail.address,
-            province: formValue.address_detail.province,
-            district: formValue.address_detail.district,
-            ward: formValue.address_detail.ward,
-            google_address_link: formValue.address_detail.google_address_link
-          },
+          category_id: formValue.category_id,
+          product_parent_id: formValue.product_parent_id,
+          address_detail: formValue.address_detail,
           product_detail: {
-            bedroom: formValue.product_detail.bedroom,
-            bathroom: formValue.product_detail.bathroom,
-            area: formValue.product_detail.area,
-            price: formValue.product_detail.price,
-            price_to: formValue.product_detail.price_to,
-            content: formValue.product_detail.content,
-            type_product: formValue.product_detail.type_product,
-            investor: formValue.product_detail.investor,
-            project_type: formValue.product_detail.project_type,
-            project_status: formValue.product_detail.project_status,
-            type_of_investment: formValue.product_detail.type_of_investment || '',
-            eletric_price: formValue.product_detail.eletric_price || 0,
-            water_price: formValue.product_detail.water_price || 0,
-            internet_price: formValue.product_detail.internet_price || 0,
-            utilities: formValue.product_detail.utilities || '',
-            interiol: formValue.product_detail.interiol || ''
+            ...formValue.product_detail,
+            content: typeof content === 'object' ? JSON.stringify(content) : content
           },
-          tag_ids: formValue.tag_ids
+          tag_ids: formValue.tag_ids || []
         };
 
         let response;
 
         // 1. Create/Update product first
         if (this.isEdit && this.productId) {
-          response = await this.productService.updateProduct(this.productId, requestData).toPromise();
+          response = await this.productService.updateProduct(this.productId, request).toPromise();
           this.message.success('Cập nhật sản phẩm thành công');
         } else {
-          response = await this.productService.createProduct(requestData).toPromise();
+          response = await this.productService.createProduct(request).toPromise();
           this.message.success('Tạo sản phẩm thành công');
         }
 
@@ -695,13 +765,6 @@ export class ProductFormComponent implements OnInit {
       } finally {
         this.loading = false;
       }
-    } else {
-      Object.values(this.productForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsTouched();
-        }
-      });
-      this.message.warning('Vui lòng điền đầy đủ thông tin bắt buộc');
     }
   }
 
@@ -723,19 +786,23 @@ export class ProductFormComponent implements OnInit {
   };
 
   formatterVND = (value: number): string => {
-    if (!value) return '0';
-    return `${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} VNĐ`;
+    if (!value) return '0 VNĐ';
+    return `${value.toLocaleString('vi-VN')} VNĐ`;
   };
 
-  parserVND = (value: string): number => {
-    if (!value) return 0;
-    return Number(value.replace(/[^\d]/g, ''));
+  parserVND = (value: string | number): number => {
+    try {
+      const stringValue = String(value);
+      return Number(stringValue.replace(/[^\d]/g, '')) || 0;
+    } catch {
+      return 0;
+    }
   };
 
   // Thêm validator cho category_id
   categoryValidator(control: AbstractControl): ValidationErrors | null {
     const categoryId = control.value;
-    const productParentId = this.productForm.get('product_parent_id')?.value;
+    const productParentId = this.productForm?.get('product_parent_id')?.value;
 
     if (productParentId && categoryId === 7) {
       return { invalidCategory: true };
@@ -755,5 +822,9 @@ export class ProductFormComponent implements OnInit {
         this.message.error('Có lỗi xảy ra khi tải danh sách dự án');
       }
     });
+  }
+
+  get contentControl(): FormControl {
+    return this.productForm.get('product_detail.content') as FormControl;
   }
 }

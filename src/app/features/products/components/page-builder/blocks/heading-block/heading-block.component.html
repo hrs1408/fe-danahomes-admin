@@ -1,0 +1,61 @@
+<div class="heading-block">
+  <nz-form-item>
+    <nz-form-control>
+      <input nz-input
+             [(ngModel)]="block.content"
+             (ngModelChange)="onContentChange($event)"
+             placeholder="Nhập nội dung tiêu đề">
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="block-settings">
+    <nz-form-item>
+      <nz-form-label>Cấp độ</nz-form-label>
+      <nz-form-control>
+        <nz-select [(ngModel)]="block.level"
+                   (ngModelChange)="onLevelChange($event)">
+          <nz-option *ngFor="let option of levelOptions"
+                    [nzValue]="option.value"
+                    [nzLabel]="option.label">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Căn chỉnh</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group [(ngModel)]="block.alignment"
+                        (ngModelChange)="onAlignmentChange($event)">
+          <label *ngFor="let option of alignmentOptions"
+                 nz-radio
+                 [nzValue]="option.value">
+            <i nz-icon [nzType]="option.icon"></i>
+          </label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Màu sắc</nz-form-label>
+      <nz-form-control>
+        <input nz-input
+               type="color"
+               [(ngModel)]="block.color"
+               (ngModelChange)="onColorChange($event)">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Cỡ chữ (px)</nz-form-label>
+      <nz-form-control>
+        <nz-input-number [(ngModel)]="block.fontSize"
+                        (ngModelChange)="onFontSizeChange($event)"
+                        [nzMin]="12"
+                        [nzMax]="72"
+                        [nzStep]="1">
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</div>

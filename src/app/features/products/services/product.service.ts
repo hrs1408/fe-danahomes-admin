@@ -58,4 +58,8 @@ export class ProductService {
   getProductByProject(): Observable<ProductListResponse> {
     return this.http.get<ProductListResponse>(`${this.apiUrl}/product-by-project`);
   }
+
+  getProduct(id: number): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(`${this.apiUrl}/get-by-id/${id}`);
+  }
 }
