@@ -248,13 +248,14 @@ export class PageBuilderComponent implements ControlValueAccessor, OnInit {
         block.style = 'bullet';
         break;
       case 'image-list':
-        block.images = [];
+        block.items = [];
         block.layout = 'grid';
         block.columns = 3;
         break;
       case 'video':
         block.url = '';
         block.controls = true;
+        block.autoplay = false;
         break;
       case 'gallery':
         block.images = [];
@@ -263,22 +264,20 @@ export class PageBuilderComponent implements ControlValueAccessor, OnInit {
         block.spacing = 16;
         break;
       case 'image-box':
-        block.image = {
-          url: '',
-          alt: '',
-          width: null,
-          height: null
+        (block as ImageBoxBlock).image = {
+          url: 'assets/images/placeholder.png',
+          alt: 'Preview image'
         };
-        block.title = '';
-        block.description = '';
-        block.layout = 'left';
-        block.titleTag = 'h3';
-        block.imageRounded = false;
-        block.imageShadow = false;
-        block.backgroundColor = null;
-        block.textColor = null;
-        block.padding = 24;
-        block.spacing = 24;
+        (block as ImageBoxBlock).layout = 'left';
+        (block as ImageBoxBlock).titleTag = 'h2';
+        (block as ImageBoxBlock).title = 'Tiêu đề mẫu';
+        (block as ImageBoxBlock).description = 'Mô tả mẫu';
+        (block as ImageBoxBlock).imageRounded = false;
+        (block as ImageBoxBlock).imageShadow = false;
+        (block as ImageBoxBlock).backgroundColor = '#ffffff';
+        (block as ImageBoxBlock).textColor = '#000000';
+        (block as ImageBoxBlock).padding = 24;
+        (block as ImageBoxBlock).spacing = 16;
         break;
     }
 

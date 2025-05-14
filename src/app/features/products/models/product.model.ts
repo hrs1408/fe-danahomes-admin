@@ -51,7 +51,6 @@ export interface Product {
   name: string;
   category_id: number;
   product_parent_id?: number;
-  type_product: string;
   address_detail: AddressDetail;
   product_detail: ProductDetail;
   tag?: Tag[];
@@ -63,7 +62,6 @@ export interface ProductRequest {
   slug: string;
   category_id: number;
   product_parent_id?: number;
-  type_product: string;
   address_detail: AddressDetail;
   product_detail: ProductDetail;
   tag_ids: number[];

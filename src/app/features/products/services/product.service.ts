@@ -60,6 +60,6 @@ export class ProductService {
   }
 
   getProduct(id: number): Observable<ProductResponse> {
-    return this.http.get<ProductResponse>(`${environment.apiUrl}products/${id}`);
+    return this.http.get<ProductResponse>(`${this.apiUrl}/get-by-id/${id}`);
   }
 }
