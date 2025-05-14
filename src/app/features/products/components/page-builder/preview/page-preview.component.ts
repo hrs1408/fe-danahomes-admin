@@ -10,6 +10,13 @@ import { PageContent, ContentBlock, SliderBlock, ParagraphBlock, ListBlock, Imag
 export class PagePreviewComponent {
   @Input() content!: PageContent;
 
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/placeholder.png';
+    }
+  }
+
   isHeadingBlock(block: ContentBlock | LayoutSection): block is HeadingBlock {
     return 'type' in block && block.type === 'heading';
   }

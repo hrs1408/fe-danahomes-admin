@@ -209,19 +209,27 @@
 
       <!-- Image Box Block -->
       <div *ngIf="isImageBoxBlock(block)" class="preview-block image-box-block">
-        <div class="image-box" [class]="'layout-' + block.layout" [style.backgroundColor]="block.backgroundColor" [style.color]="block.textColor" [style.padding.px]="block.padding">
+        <div class="image-box" [class]="'layout-' + block.layout" [style.backgroundColor]="block.backgroundColor || '#ffffff'" [style.color]="block.textColor || '#000000'" [style.padding.px]="block.padding || 0">
           <div class="image-wrapper" [class.rounded]="block.imageRounded" [class.shadow]="block.imageShadow">
-            <img [src]="block.image.url" [alt]="block.image.alt" [style.width.px]="block.image.width" [style.height.px]="block.image.height">
+            <img [src]="block.image?.url || 'assets/images/placeholder.png'"
+                 [alt]="block.image?.alt || 'Preview image'"
+                 [style.width.px]="block.image?.width"
+                 [style.height.px]="block.image?.height"
+                 (error)="onImageError($event)">
           </div>
-          <div class="content" [style.marginLeft.px]="block.layout === 'right' ? block.spacing : null" [style.marginRight.px]="block.layout === 'left' ? block.spacing : null" [style.marginTop.px]="block.layout === 'bottom' ? block.spacing : null" [style.marginBottom.px]="block.layout === 'top' ? block.spacing : null">
-            <ng-container [ngSwitch]="block.titleTag">
-              <h2 *ngSwitchCase="'h2'">{{block.title}}</h2>
-              <h3 *ngSwitchCase="'h3'">{{block.title}}</h3>
-              <h4 *ngSwitchCase="'h4'">{{block.title}}</h4>
-              <h5 *ngSwitchCase="'h5'">{{block.title}}</h5>
-              <h6 *ngSwitchCase="'h6'">{{block.title}}</h6>
+          <div class="content"
+               [style.marginLeft.px]="block.layout === 'right' ? (block.spacing || 16) : null"
+               [style.marginRight.px]="block.layout === 'left' ? (block.spacing || 16) : null"
+               [style.marginTop.px]="block.layout === 'bottom' ? (block.spacing || 16) : null"
+               [style.marginBottom.px]="block.layout === 'top' ? (block.spacing || 16) : null">
+            <ng-container [ngSwitch]="block.titleTag || 'h2'">
+              <h2 *ngSwitchCase="'h2'">{{block.title || 'Tiêu đề mẫu'}}</h2>
+              <h3 *ngSwitchCase="'h3'">{{block.title || 'Tiêu đề mẫu'}}</h3>
+              <h4 *ngSwitchCase="'h4'">{{block.title || 'Tiêu đề mẫu'}}</h4>
+              <h5 *ngSwitchCase="'h5'">{{block.title || 'Tiêu đề mẫu'}}</h5>
+              <h6 *ngSwitchCase="'h6'">{{block.title || 'Tiêu đề mẫu'}}</h6>
             </ng-container>
-            <p>{{block.description}}</p>
+            <p>{{block.description || 'Nhập mô tả cho block này...'}}</p>
           </div>
         </div>
       </div>

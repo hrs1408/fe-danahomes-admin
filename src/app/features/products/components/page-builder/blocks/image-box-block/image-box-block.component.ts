@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, OnInit } from '@angular/core';
 import { ImageBoxBlock } from '../../../../models/page-builder.model';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-image-box-block',
@@ -7,9 +8,12 @@ import { ImageBoxBlock } from '../../../../models/page-builder.model';
   styleUrls: ['./image-box-block.component.scss'],
   standalone: false,
 })
-export class ImageBoxBlockComponent {
+export class ImageBoxBlockComponent implements OnDestroy, OnInit {
   @Input() block!: ImageBoxBlock;
   @Output() blockChange = new EventEmitter<ImageBoxBlock>();
+
+  private destroy$ = new Subject<void>();
+  private updateSubject = new Subject<Partial<ImageBoxBlock>>();
 
   layoutOptions = [
     { label: 'Ảnh bên trái', value: 'left' },
@@ -26,6 +30,65 @@ export class ImageBoxBlockComponent {
     { label: 'H5', value: 'h5' },
     { label: 'H6', value: 'h6' }
   ];
+
+  constructor() {
+    this.updateSubject
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged((prev, curr) => {
+          return JSON.stringify(prev) === JSON.stringify(curr);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(changes => {
+        this.blockChange.emit({
+          ...this.block,
+          ...changes
+        });
+      });
+  }
+
+  ngOnInit() {
+    // Khởi tạo giá trị mặc định nếu block chưa có đầy đủ thuộc tính
+    if (!this.block.image) {
+      this.block.image = {
+        url: '',
+        alt: '',
+      };
+    }
+    if (!this.block.layout) {
+      this.block.layout = 'left';
+    }
+    if (!this.block.titleTag) {
+      this.block.titleTag = 'h2';
+    }
+    if (this.block.imageRounded === undefined) {
+      this.block.imageRounded = false;
+    }
+    if (this.block.imageShadow === undefined) {
+      this.block.imageShadow = false;
+    }
+    if (!this.block.padding) {
+      this.block.padding = 24;
+    }
+    if (!this.block.spacing) {
+      this.block.spacing = 16;
+    }
+    if (!this.block.title) {
+      this.block.title = 'Tiêu đề mẫu';
+    }
+    if (!this.block.description) {
+      this.block.description = 'Mô tả mẫu';
+    }
+
+    // Emit block đã được khởi tạo
+    this.blockChange.emit(this.block);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onImageUrlChange(url: string): void {
     this.updateBlock({ image: { ...this.block.image, url } });
@@ -52,19 +115,31 @@ export class ImageBoxBlockComponent {
   }
 
   onLayoutChange(layout: 'left' | 'right' | 'top' | 'bottom' | 'overlay'): void {
-    this.updateBlock({ layout });
+    this.blockChange.emit({
+      ...this.block,
+      layout
+    });
   }
 
   onTitleTagChange(titleTag: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'): void {
-    this.updateBlock({ titleTag });
+    this.blockChange.emit({
+      ...this.block,
+      titleTag
+    });
   }
 
   onImageRoundedChange(imageRounded: boolean): void {
-    this.updateBlock({ imageRounded });
+    this.blockChange.emit({
+      ...this.block,
+      imageRounded
+    });
   }
 
   onImageShadowChange(imageShadow: boolean): void {
-    this.updateBlock({ imageShadow });
+    this.blockChange.emit({
+      ...this.block,
+      imageShadow
+    });
   }
 
   onBackgroundColorChange(backgroundColor: string): void {
@@ -83,10 +158,14 @@ export class ImageBoxBlockComponent {
     this.updateBlock({ spacing });
   }
 
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/placeholder.png';
+    }
+  }
+
   private updateBlock(changes: Partial<ImageBoxBlock>): void {
-    this.blockChange.emit({
-      ...this.block,
-      ...changes
-    });
+    this.updateSubject.next(changes);
   }
 }

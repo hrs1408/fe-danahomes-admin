@@ -97,21 +97,4 @@
       </nz-form-control>
     </nz-form-item>
   </form>
-
-  <!-- Preview -->
-  <div class="preview" [class]="'layout-' + block.layout" [style.backgroundColor]="block.backgroundColor" [style.color]="block.textColor" [style.padding.px]="block.padding">
-    <div class="image-wrapper" [class.rounded]="block.imageRounded" [class.shadow]="block.imageShadow">
-      <img [src]="block.image.url" [alt]="block.image.alt" [style.width.px]="block.image.width" [style.height.px]="block.image.height">
-    </div>
-    <div class="content" [style.marginLeft.px]="block.layout === 'right' ? block.spacing : null" [style.marginRight.px]="block.layout === 'left' ? block.spacing : null" [style.marginTop.px]="block.layout === 'bottom' ? block.spacing : null" [style.marginBottom.px]="block.layout === 'top' ? block.spacing : null">
-      <ng-container [ngSwitch]="block.titleTag">
-        <h2 *ngSwitchCase="'h2'">{{block.title}}</h2>
-        <h3 *ngSwitchCase="'h3'">{{block.title}}</h3>
-        <h4 *ngSwitchCase="'h4'">{{block.title}}</h4>
-        <h5 *ngSwitchCase="'h5'">{{block.title}}</h5>
-        <h6 *ngSwitchCase="'h6'">{{block.title}}</h6>
-      </ng-container>
-      <p>{{block.description}}</p>
-    </div>
-  </div>
 </div>
