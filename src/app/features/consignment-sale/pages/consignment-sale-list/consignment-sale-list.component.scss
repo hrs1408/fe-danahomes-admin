@@ -1,0 +1,30 @@
+.consignment-sale-list {
+  padding: 24px;
+
+  .card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+    }
+  }
+
+  nz-table {
+    th {
+      font-weight: 500;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .ant-btn-link {
+      padding: 0 8px;
+    }
+  }
+}

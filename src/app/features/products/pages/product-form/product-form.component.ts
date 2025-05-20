@@ -478,6 +478,10 @@ export class ProductFormComponent implements OnInit {
           internet_price: [0],
           utilities: [''],
           interiol: [''],
+          legal_documents: [''],
+          form_of_ownership: [''],
+          management_and_operation_unit: [''],
+          project_scale: [''],
         },
         { validators: this.priceRangeValidator }
       ),
@@ -620,6 +624,10 @@ export class ProductFormComponent implements OnInit {
             eletric_price: product?.product_detail?.eletric_price || 0,
             water_price: product?.product_detail?.water_price || 0,
             internet_price: product?.product_detail?.internet_price || 0,
+            legal_documents: product?.product_detail?.legal_documents || '',
+            form_of_ownership: product?.product_detail?.form_of_ownership || '',
+            management_and_operation_unit: product?.product_detail?.management_and_operation_unit || '',
+            project_scale: product?.product_detail?.project_scale || '',
           },
           tag_ids: product?.tag?.map((t) => t.id) || [],
         };

@@ -249,6 +249,53 @@
             </div>
           </ng-container>
 
+          <!-- Thông tin pháp lý và quy mô dự án - chỉ hiển thị cho dự án -->
+          <div nz-row [nzGutter]="24" *ngIf="productForm.get('category_id')?.value === 7">
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Pháp lý</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="legal_documents"
+                           placeholder="Nhập thông tin pháp lý"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Hình thức sở hữu</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="form_of_ownership"
+                           placeholder="Nhập hình thức sở hữu"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
+          <div nz-row [nzGutter]="24" *ngIf="productForm.get('category_id')?.value === 7">
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Đơn vị quản lý vận hành</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="management_and_operation_unit"
+                           placeholder="Nhập thông tin đơn vị quản lý vận hành"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12">
+              <nz-form-item>
+                <nz-form-label>Quy mô dự án</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="project_scale"
+                           placeholder="Nhập thông tin quy mô dự án"
+                           [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+
           <!-- Chủ đầu tư - chỉ hiển thị cho dự án -->
           <div nz-row [nzGutter]="24" *ngIf="productForm.get('category_id')?.value === 7">
             <div nz-col [nzSpan]="24">

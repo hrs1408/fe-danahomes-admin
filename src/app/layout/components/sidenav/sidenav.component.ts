@@ -67,6 +67,16 @@ export class SidenavComponent {
       route: '/contacts',
     },
     {
+      title: 'Ký gửi mua bán',
+      icon: 'contacts',
+      route: '/consignment-sale',
+    },
+    {
+      title: 'Ký gửi cho thuê',
+      icon: 'contacts',
+      route: '/consignment-rent',
+    },
+    {
       title: 'Cài đặt website',
       icon: 'setting',
       route: '/website-settings',

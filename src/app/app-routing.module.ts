@@ -50,6 +50,14 @@ const routes: Routes = [
       {
         path: 'account',
         loadChildren: () => import('./features/account/account.module').then(m => m.AccountModule)
+      },
+      {
+        path: 'consignment-rent',
+        loadChildren: () => import('./features/consignment-rent/consignment-rent.module').then(m => m.ConsignmentRentModule)
+      },
+      {
+        path: 'consignment-sale',
+        loadChildren: () => import('./features/consignment-sale/consignment-sale.module').then(m => m.ConsignmentSaleModule)
       }
     ]
   },
